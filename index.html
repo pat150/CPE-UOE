@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPE Use of English – Practice Tests</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf8;
+    --ink: #1a1a2e;
+    --accent: #8b2fc9;
+    --accent2: #e8a020;
+    --muted: #6b6b7b;
+    --border: #d4ccbc;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(139,47,201,0.06) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, rgba(232,160,32,0.07) 0%, transparent 50%);
+    font-family: 'Source Serif 4', serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 36px 40px;
+    text-align: center;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+
+  main {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 0 24px 80px;
+  }
+
+  .intro {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .intro p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .test-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  }
+  .test-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-color: var(--accent);
+  }
+  .test-card .left { flex: 1; }
+  .test-card .num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .test-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+  .test-card .parts {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .test-card .arrow {
+    font-size: 1.4rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+  .test-card:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .topic-tag {
+    background: rgba(139,47,201,0.08);
+    color: var(--accent);
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .fade-in { animation: fadeUp 0.5s ease both; }
+  .fade-in:nth-child(1) { animation-delay: 0.05s; }
+  .fade-in:nth-child(2) { animation-delay: 0.10s; }
+  .fade-in:nth-child(3) { animation-delay: 0.15s; }
+  .fade-in:nth-child(4) { animation-delay: 0.20s; }
+  .fade-in:nth-child(5) { animation-delay: 0.25s; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 500px) {
+    header { padding: 28px 20px; }
+    header h1 { font-size: 1.5rem; }
+    .test-card { padding: 18px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">EEC · CPE Preparation</div>
+  <h1>Use of English</h1>
+  <p>Paper 3 · Parts 1, 2 &amp; 4 · 1 hour 30 minutes</p>
+</header>
+
+<main>
+  <div class="intro">
+    <h2>Choose a Practice Test</h2>
+    <p>Each test covers Open Cloze (Part 1), Word Formation (Part 2),<br>and Key Word Transformations (Part 4).</p>
+  </div>
+
+  <div class="test-list">
+
+    <a class="test-card fade-in" href="practice_test_1.html">
+      <div class="left">
+        <div class="num">Practice Test 1</div>
+        <h3>To Sleep or Not to Sleep</h3>
+        <div class="topics">
+          <span class="topic-tag">Sleep &amp; Relaxation</span>
+          <span class="topic-tag">History</span>
+        </div>
+        <div class="parts">Part 1 · Part 2 · Part 4</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="test-card fade-in" href="practice_test_2.html">
+      <div class="left">
+        <div class="num">Practice Test 2</div>
+        <h3>Time to Relax? How?</h3>
+        <div class="topics">
+          <span class="topic-tag">Holidays</span>
+          <span class="topic-tag">Flamenco Dance</span>
+        </div>
+        <div class="parts">Part 1 · Part 2 · Part 4</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="test-card fade-in" href="practice_test_3.html">
+      <div class="left">
+        <div class="num">Practice Test 3</div>
+        <h3>Queen Victoria</h3>
+        <div class="topics">
+          <span class="topic-tag">History</span>
+          <span class="topic-tag">Copyright Law</span>
+        </div>
+        <div class="parts">Part 1 · Part 2 · Part 4</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="test-card fade-in" href="practice_test_10.html">
+      <div class="left">
+        <div class="num">Practice Test 10</div>
+        <h3>Choosing a Lifestyle</h3>
+        <div class="topics">
+          <span class="topic-tag">Society</span>
+          <span class="topic-tag">Law &amp; Nuisance</span>
+        </div>
+        <div class="parts">Part 1 · Part 2 · Part 4</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="test-card fade-in" href="practice_test_13.html">
+      <div class="left">
+        <div class="num">Practice Test 13</div>
+        <h3>Powerful Efficiency</h3>
+        <div class="topics">
+          <span class="topic-tag">Energy</span>
+          <span class="topic-tag">Invasive Species</span>
+        </div>
+        <div class="parts">Part 1 · Part 2 · Part 4</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+  </div>
+</main>
+
+<footer>EEC · Cambridge Proficiency English · Use of English Practice</footer>
+
+</body>
+</html>
