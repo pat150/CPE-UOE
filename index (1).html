@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pat Allen · English Language Resources</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf8;
+    --ink: #1a1a2e;
+    --accent: #8b2fc9;
+    --accent2: #e8a020;
+    --muted: #6b6b7b;
+    --border: #d4ccbc;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'Source Serif 4', serif; color: var(--ink); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--ink);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    height: 60px;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; text-decoration: none; letter-spacing: 0.03em; }
+  .nav-logo span { color: var(--accent2); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent2); }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    background-image: radial-gradient(ellipse at 15% 60%, rgba(139,47,201,0.25) 0%, transparent 55%), radial-gradient(ellipse at 85% 30%, rgba(232,160,32,0.15) 0%, transparent 50%);
+    color: #fff;
+    padding: 90px 40px 110px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: var(--bg); clip-path: ellipse(55% 100% at 50% 100%); }
+  .hero .badge { display: inline-block; background: rgba(139,47,201,0.3); border: 1px solid rgba(139,47,201,0.5); color: #d4a8ff; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent2); }
+  .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.65); max-width: 520px; margin: 0 auto; line-height: 1.7; font-style: italic; }
+
+  /* SECTIONS */
+  section { max-width: 900px; margin: 0 auto; padding: 70px 24px; }
+  .section-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 14px; }
+  .section-intro { color: var(--muted); font-size: 0.96rem; line-height: 1.75; max-width: 620px; margin-bottom: 40px; }
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  /* ABOUT CARDS */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .about-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .about-card .icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+  .about-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 8px; }
+  .about-card p { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+
+  /* TEST CARDS */
+  .test-grid { display: flex; flex-direction: column; gap: 14px; }
+  .test-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 26px; display: flex; align-items: center; justify-content: space-between; gap: 20px; text-decoration: none; color: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+  .test-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: var(--accent); }
+  .tc-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .test-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { background: rgba(139,47,201,0.08); color: var(--accent); font-size: 0.7rem; padding: 2px 9px; border-radius: 10px; font-weight: 600; }
+  .tc-arrow { font-size: 1.3rem; color: var(--accent); flex-shrink: 0; transition: transform 0.15s; }
+  .test-card:hover .tc-arrow { transform: translateX(4px); }
+
+  /* RESOURCE CARDS */
+  .resources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .resource-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .r-level { display: inline-block; background: var(--accent2); color: #fff; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 8px; margin-bottom: 10px; }
+  .resource-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 6px; }
+  .resource-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .coming-soon { font-size: 0.75rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 10px; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: rgba(255,255,255,0.45); text-align: center; padding: 32px 24px; font-size: 0.78rem; font-style: italic; }
+  footer strong { color: rgba(255,255,255,0.7); font-style: normal; }
+
+  .fade-in { animation: fadeUp 0.5s ease both; }
+  .fade-in:nth-child(1){animation-delay:0.05s}
+  .fade-in:nth-child(2){animation-delay:0.10s}
+  .fade-in:nth-child(3){animation-delay:0.15s}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+
+  @media(max-width:650px){
+    .hero h1{font-size:2rem}
+    .about-grid{grid-template-columns:1fr}
+    .resources-grid{grid-template-columns:1fr}
+    nav{padding:0 20px}
+    .nav-links{gap:14px}
+    .nav-links a{font-size:0.75rem}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Pat Allen · <span>English</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#tests">CPE Tests</a>
+    <a href="#resources">Resources</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="badge">English Language Learning</div>
+  <h1>Resources for<br><em>Every Level</em></h1>
+  <p>Practice materials, interactive tests and resources to help you reach your English language goals.</p>
+</div>
+
+<section id="about">
+  <div class="section-label">Welcome</div>
+  <h2 class="section-title">About This Site</h2>
+  <p class="section-intro">This site brings together English language learning materials for students at all levels — from intermediate through to proficiency. Use the interactive tests to practise under exam conditions, and check back regularly as new resources are added.</p>
+  <div class="about-grid">
+    <div class="about-card fade-in">
+      <span class="icon">📝</span>
+      <h3>Interactive Tests</h3>
+      <p>Fully interactive practice tests with instant feedback and automatic scoring sent directly to your teacher.</p>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">📚</span>
+      <h3>All Levels</h3>
+      <p>Materials covering a range of Cambridge levels — B2 First, C1 Advanced and C2 Proficiency.</p>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">🎯</span>
+      <h3>Exam Focused</h3>
+      <p>Exercises designed around real Cambridge exam formats to build confidence and technique.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="tests">
+  <div class="section-label">C2 Proficiency · Use of English</div>
+  <h2 class="section-title">CPE Practice Tests</h2>
+  <p class="section-intro">Paper 3 · Parts 1, 2 &amp; 4 · Open Cloze, Word Formation and Key Word Transformations. Complete each test online — your results are sent to your teacher automatically.</p>
+  <div class="test-grid">
+    <a class="test-card" href="practice_test_1.html">
+      <div class="tc-left">
+        <div class="tc-num">Practice Test 1</div>
+        <h3>To Sleep or Not to Sleep</h3>
+        <div class="tags"><span class="tag">Sleep &amp; Relaxation</span><span class="tag">History</span></div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="test-card" href="practice_test_2.html">
+      <div class="tc-left">
+        <div class="tc-num">Practice Test 2</div>
+        <h3>Time to Relax? How?</h3>
+        <div class="tags"><span class="tag">Holidays</span><span class="tag">Flamenco Dance</span></div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="test-card" href="practice_test_3.html">
+      <div class="tc-left">
+        <div class="tc-num">Practice Test 3</div>
+        <h3>Queen Victoria</h3>
+        <div class="tags"><span class="tag">History</span><span class="tag">Copyright Law</span></div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="test-card" href="practice_test_10.html">
+      <div class="tc-left">
+        <div class="tc-num">Practice Test 10</div>
+        <h3>Choosing a Lifestyle</h3>
+        <div class="tags"><span class="tag">Society</span><span class="tag">Law &amp; Nuisance</span></div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="test-card" href="practice_test_13.html">
+      <div class="tc-left">
+        <div class="tc-num">Practice Test 13</div>
+        <h3>Powerful Efficiency</h3>
+        <div class="tags"><span class="tag">Energy</span><span class="tag">Invasive Species</span></div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="resources">
+  <div class="section-label">Materials</div>
+  <h2 class="section-title">Other Resources</h2>
+  <p class="section-intro">Additional materials for different levels and skills. More resources will be added here over time.</p>
+  <div class="resources-grid">
+    <div class="resource-card">
+      <div class="r-level">C2 Proficiency</div>
+      <h3>CPE Writing Guide</h3>
+      <p>Tips and model answers for the CPE Writing paper — essays, reports and reviews.</p>
+      <div class="coming-soon">Coming soon</div>
+    </div>
+    <div class="resource-card">
+      <div class="r-level">C1 Advanced</div>
+      <h3>CAE Practice Materials</h3>
+      <p>Use of English and Reading exercises for Cambridge C1 Advanced students.</p>
+      <div class="coming-soon">Coming soon</div>
+    </div>
+    <div class="resource-card">
+      <div class="r-level">B2 First</div>
+      <h3>FCE Grammar Practice</h3>
+      <p>Key grammar structures and practice exercises for the B2 First examination.</p>
+      <div class="coming-soon">Coming soon</div>
+    </div>
+    <div class="resource-card">
+      <div class="r-level">All Levels</div>
+      <h3>Vocabulary Builder</h3>
+      <p>Topic-based vocabulary lists and exercises covering common exam themes.</p>
+      <div class="coming-soon">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Pat Allen</strong> · English Language Resources · All levels welcome
+</footer>
+
+</body>
+</html>
