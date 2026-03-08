@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CAE Part 1 – Multiple Choice Cloze</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Source Serif 4', serif; color: #e8e0d5; }
+  header { background: rgba(0,0,0,0.4); border-bottom: 2px solid #c9a84c; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Playfair Display', serif; color: #c9a84c; letter-spacing: 3px; font-size: 1rem; text-transform: uppercase; }
+  .header-btn { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 18px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; letter-spacing: 1px; font-family: inherit; }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 36px; max-width: 780px; margin: 40px auto; backdrop-filter: blur(8px); }
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
+  input[type="text"], input[type="password"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.5); border-radius: 4px; color: #e8e0d5; font-size: 1rem; font-family: inherit; margin-bottom: 20px; }
+  input::placeholder { color: #888; }
+  .btn-primary { background: #c9a84c; color: #0f2027; border: none; padding: 12px 32px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; font-family: inherit; }
+  .btn-primary:hover { background: #d9bb6a; }
+  .passage-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 20px 24px; margin-bottom: 28px; font-size: 0.95rem; line-height: 1.9; color: #ddd; }
+  .passage-box h3 { font-family: 'Playfair Display', serif; color: #c9a84c; margin-bottom: 14px; font-size: 1.1rem; }
+  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #c9a84c; text-align: center; color: #c9a84c; font-weight: bold; font-size: 0.85rem; padding: 0 6px; vertical-align: middle; }
+  .question-block { margin-bottom: 24px; background: rgba(255,255,255,0.04); border-radius: 6px; padding: 18px 20px; border: 1px solid rgba(255,255,255,0.08); }
+  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px; }
+  .options-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .option { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 4px; cursor: pointer; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; font-size: 0.92rem; color: #ccc; }
+  .option:hover { background: rgba(201,168,76,0.1); border-color: #c9a84c; }
+  .option.selected { background: rgba(201,168,76,0.2); border-color: #c9a84c; color: #fff; }
+  .option-letter { font-weight: bold; color: #888; min-width: 16px; }
+  .option.selected .option-letter { color: #c9a84c; }
+  .score-box { text-align: center; padding: 30px 10px; }
+  .big-score { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: #c9a84c; }
+  .result-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.9rem; }
+  .correct { color: #6fcf97; font-weight: bold; }
+  .wrong { color: #eb5757; font-weight: bold; }
+  .gold { color: #c9a84c; font-weight: bold; }
+  .key-editor { margin-bottom: 28px; padding: 20px; background: rgba(201,168,76,0.06); border-radius: 6px; border: 1px solid rgba(201,168,76,0.3); }
+  .key-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.92rem; }
+  .key-opt { cursor: pointer; padding: 4px 12px; border-radius: 4px; border: 1px solid #555; color: #aaa; font-family: inherit; font-size: 0.88rem; background: transparent; }
+  .key-opt.active { border: 2px solid #c9a84c; color: #c9a84c; font-weight: bold; }
+  .sub-card { margin-bottom: 22px; padding: 20px; background: rgba(255,255,255,0.04); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+  .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1.05rem; font-weight: bold; }
+  .sub-score { color: #c9a84c; font-weight: bold; margin-left: 12px; }
+  .sub-time { color: #777; font-size: 0.8rem; margin-left: 12px; }
+  .ans-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { text-align: center; min-width: 55px; }
+  .pill-label { font-size: 0.7rem; color: #888; margin-bottom: 4px; }
+  .pill-val { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; font-weight: bold; font-size: 0.9rem; }
+  .pill-val.ok { background: rgba(111,207,151,0.2); border: 2px solid #6fcf97; color: #6fcf97; }
+  .pill-val.bad { background: rgba(235,87,87,0.2); border: 2px solid #eb5757; color: #eb5757; }
+  .edit-sel { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 4px 6px; font-family: inherit; }
+  .btn-sm { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 5px 14px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; font-family: inherit; }
+  .btn-sm:hover { background: rgba(201,168,76,0.15); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 16px; font-size: 0.9rem; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .progress { color: #aaa; font-size: 0.85rem; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .home-link { display: inline-block; margin-bottom: 20px; color: #c9a84c; font-size: 0.85rem; text-decoration: none; letter-spacing: 1px; }
+  .home-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CAE · Paper 1 · Part 1</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Multiple Choice Cloze</h1>
+    <p class="subtitle">Beauty is in the eye of the beholder — Questions 1–8 · Choose A, B, C or D</p>
+    <input type="text" id="student-name" placeholder="Enter your full name..."/>
+    <button class="btn-primary" onclick="startQuiz()">Start Exercise →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <h1>Questions 1–8</h1>
+      <span class="progress" id="progress-label">0/8 answered</span>
+    </div>
+    <p class="subtitle" style="margin-bottom:16px;">Read the text and choose the best word (A, B, C or D) for each gap.</p>
+    <div class="passage-box">
+      <h3>Beauty is in the eye of the beholder</h3>
+      <p>People have been debating the principles of beauty for thousands of years, but it still seems impossible to define it objectively. German philosopher Immanuel Kant <span class="blank" id="b1">(1) ........</span> whether something can possess an objective property that makes it beautiful. He concluded that although everyone accepts that beauty exists, no one has ever <span class="blank" id="b2">(2) ........</span> on the precise criteria by which beauty may be <span class="blank" id="b3">(3) ........</span>. Symmetry may have some significance. It has been proved to be attractive to the human <span class="blank" id="b4">(4) ........</span>, in general, so perhaps a face may seem beautiful because of the <span class="blank" id="b5">(5) ........</span> between its two sides. Studies have shown that babies spend more time looking at symmetrical faces than asymmetrical ones and symmetry has also been <span class="blank" id="b6">(6) ........</span> as more attractive by adults looking at a series of photos. So although there seems to be no universal consensus on what <span class="blank" id="b7">(7) ........</span> beauty, there is at least an understanding that facial symmetry is an important <span class="blank" id="b8">(8) ........</span>.</p>
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()">Submit Answers →</button>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:8px;margin-bottom:28px;">Your answers have been submitted.</div>
+      <div id="done-breakdown"></div>
+      <button class="btn-primary" style="margin-top:28px;" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="card" style="max-width:420px;">
+    <h1>Teacher Login</h1>
+    <p class="subtitle" style="margin-bottom:20px;">Enter your password to view submissions</p>
+    <input type="password" id="admin-pass" placeholder="Password..." onkeydown="if(event.key==='Enter')adminLogin()"/>
+    <div class="error-msg" id="login-error" style="display:none;"></div>
+    <button class="btn-primary" onclick="adminLogin()">Login</button>
+    <p class="hint">Default password: <strong>teacher123</strong></p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">ANSWER KEY</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">STUDENT SUBMISSIONS</div>
+    <div id="submissions-container"><p style="color:#888;">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+  const QUESTIONS = [
+    { num: 1, options: { A: "argued", B: "decided", C: "disputed", D: "questioned" } },
+    { num: 2, options: { A: "concurred", B: "agreed", C: "debated", D: "written" } },
+    { num: 3, options: { A: "judged", B: "appreciated", C: "awarded", D: "viewed" } },
+    { num: 4, options: { A: "appearance", B: "sight", C: "eye", D: "vision" } },
+    { num: 5, options: { A: "equality", B: "reflection", C: "opposition", D: "similarity" } },
+    { num: 6, options: { A: "voted", B: "rated", C: "selected", D: "valued" } },
+    { num: 7, options: { A: "constitutes", B: "contains", C: "involves", D: "comprises" } },
+    { num: 8, options: { A: "reason", B: "one", C: "role", D: "factor" } },
+  ];
+  const OPTIONS = ["A","B","C","D"];
+  let correctAnswers = {1:"D",2:"B",3:"A",4:"C",5:"D",6:"B",7:"A",8:"D"};
+  let studentAnswers = {}, currentStudent = "";
+  let submissions = JSON.parse(localStorage.getItem("cae_p1_subs") || "[]");
+  let editingId = null, editTemp = {};
+
+  function saveData() { localStorage.setItem("cae_p1_subs", JSON.stringify(submissions)); }
+  function goTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    const hr = document.getElementById('header-right');
+    if (page==='admin') hr.innerHTML='<button class="header-btn" onclick="goTo(\'home\')">Logout</button>';
+    else if (page==='quiz') hr.innerHTML='<span class="progress" id="hp">0/8</span>';
+    else hr.innerHTML='<button class="header-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+  }
+  function goHome() { currentStudent=""; studentAnswers={}; document.getElementById('student-name').value=""; goTo('home'); }
+  function startQuiz() {
+    const name = document.getElementById('student-name').value.trim();
+    if (!name) { alert('Please enter your name.'); return; }
+    currentStudent = name; studentAnswers = {}; renderQuestions(); goTo('quiz');
+  }
+  function renderQuestions() {
+    const c = document.getElementById('questions-container'); c.innerHTML='';
+    QUESTIONS.forEach(q => {
+      const b = document.createElement('div'); b.className='question-block';
+      let opts = Object.entries(q.options).map(([l,t]) =>
+        `<div class="option" id="opt-${q.num}-${l}" onclick="selectAnswer(${q.num},'${l}')"><span class="option-letter">${l}</span>${t}</div>`
+      ).join('');
+      b.innerHTML=`<div class="q-num">QUESTION ${q.num}</div><div class="options-row">${opts}</div>`;
+      c.appendChild(b);
+    });
+  }
+  function selectAnswer(qNum, letter) {
+    OPTIONS.forEach(l => { const el=document.getElementById(`opt-${qNum}-${l}`); if(el) el.classList.remove('selected'); });
+    document.getElementById(`opt-${qNum}-${letter}`).classList.add('selected');
+    studentAnswers[qNum]=letter;
+    // update blank in passage
+    const b = document.getElementById('b'+qNum);
+    if(b) b.textContent = '('+qNum+') '+letter;
+    const lbl=document.getElementById('progress-label');
+    if(lbl) lbl.textContent=Object.keys(studentAnswers).length+'/8 answered';
+  }
+  function submitQuiz() {
+    const missing=QUESTIONS.filter(q=>!studentAnswers[q.num]).map(q=>q.num);
+    if(missing.length){alert('Please answer all questions. Missing: Q'+missing.join(', Q'));return;}
+    const score=QUESTIONS.filter(q=>studentAnswers[q.num]===correctAnswers[q.num]).length;
+    const sub={id:Date.now(),name:currentStudent,answers:{...studentAnswers},score,total:8,submittedAt:new Date().toLocaleString()};
+    submissions.push(sub); saveData(); showResult(sub); goTo('submitted');
+  }
+  function showResult(sub) {
+    document.getElementById('done-name').textContent='Well done, '+sub.name+'!';
+    document.getElementById('done-score').textContent=sub.score+'/8';
+    let html='';
+    QUESTIONS.forEach(q => {
+      const chosen=sub.answers[q.num], correct=correctAnswers[q.num], ok=chosen===correct;
+      html+=`<div class="result-row"><span>Q${q.num}</span><span>Your answer: <span class="${ok?'correct':'wrong'}">${chosen}</span></span><span>Correct: <span class="gold">${correct}</span></span><span>${ok?'✓':'✗'}</span></div>`;
+    });
+    document.getElementById('done-breakdown').innerHTML=html;
+  }
+  function adminLogin() {
+    if(document.getElementById('admin-pass').value==='teacher123'){
+      document.getElementById('login-error').style.display='none';
+      renderAdmin(); goTo('admin');
+    } else {
+      const e=document.getElementById('login-error'); e.textContent='Incorrect password.'; e.style.display='block';
+    }
+  }
+  function renderAdmin() {
+    let khtml='';
+    QUESTIONS.forEach(q => {
+      let btns=OPTIONS.map(l=>`<button class="key-opt ${correctAnswers[q.num]===l?'active':''}" onclick="setKey(${q.num},'${l}')" id="kopt-${q.num}-${l}">${l}</button>`).join('');
+      khtml+=`<div class="key-row"><span style="min-width:50px;color:#aaa;">Q${q.num}:</span>${btns}</div>`;
+    });
+    document.getElementById('key-editor').innerHTML=khtml;
+    renderSubmissions();
+  }
+  function setKey(qNum,letter) {
+    correctAnswers[qNum]=letter;
+    OPTIONS.forEach(l=>{ const el=document.getElementById(`kopt-${qNum}-${l}`); if(el) el.className='key-opt'+(l===letter?' active':''); });
+    renderSubmissions();
+  }
+  function renderSubmissions() {
+    const cnt=document.getElementById('submissions-container');
+    document.getElementById('sub-count-label').textContent=`STUDENT SUBMISSIONS (${submissions.length})`;
+    if(!submissions.length){cnt.innerHTML='<p style="color:#888;">No submissions yet.</p>';return;}
+    let html='';
+    submissions.forEach(sub=>{
+      const score=QUESTIONS.filter(q=>sub.answers[q.num]===correctAnswers[q.num]).length;
+      const isEditing=editingId===sub.id;
+      let pills='';
+      QUESTIONS.forEach(q=>{
+        const chosen=isEditing?(editTemp[q.num]||sub.answers[q.num]):sub.answers[q.num];
+        const ok=chosen===correctAnswers[q.num];
+        if(isEditing){
+          pills+=`<div class="pill"><div class="pill-label">Q${q.num}</div><select class="edit-sel" onchange="editAnswer(${q.num},this.value)">${OPTIONS.map(l=>`<option value="${l}"${chosen===l?' selected':''}>${l}</option>`).join('')}</select></div>`;
+        } else {
+          pills+=`<div class="pill"><div class="pill-label">Q${q.num}</div><div class="pill-val ${ok?'ok':'bad'}">${chosen}</div></div>`;
+        }
+      });
+      const btns=isEditing
+        ?`<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button><button class="btn-sm" onclick="cancelEdit()">Cancel</button>`
+        :`<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button>`;
+      html+=`<div class="sub-card"><div class="sub-header"><div><span class="sub-name">${sub.name}</span><span class="sub-score">${score}/8</span><span class="sub-time">${sub.submittedAt}</span></div><div style="display:flex;gap:8px;">${btns}</div></div><div class="ans-pills">${pills}</div></div>`;
+    });
+    cnt.innerHTML=html;
+  }
+  function startEdit(id){editingId=id;editTemp={...submissions.find(s=>s.id===id).answers};renderSubmissions();}
+  function editAnswer(qNum,val){editTemp[qNum]=val;}
+  function saveEdit(id){
+    const idx=submissions.findIndex(s=>s.id===id);
+    if(idx>-1){submissions[idx].answers={...editTemp};submissions[idx].score=QUESTIONS.filter(q=>editTemp[q.num]===correctAnswers[q.num]).length;saveData();}
+    editingId=null;editTemp={};renderSubmissions();
+  }
+  function cancelEdit(){editingId=null;editTemp={};renderSubmissions();}
+  function deleteSub(id){if(!confirm('Delete this submission?'))return;submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();}
+</script>
+</body>
+</html>

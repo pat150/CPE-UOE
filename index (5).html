@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cambridge Exam Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:wght@300;400;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a84c;
+    --c2: #c0392b;
+    --c2-soft: rgba(192,57,43,0.15);
+    --c1: #d35400;
+    --c1-soft: rgba(211,84,0,0.15);
+    --b2: #1a7a4a;
+    --b2-soft: rgba(26,122,74,0.15);
+    --b1: #1a5fa8;
+    --b1-soft: rgba(26,95,168,0.15);
+    --practice: #6c3483;
+    --practice-soft: rgba(108,52,131,0.15);
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #0a1628 0%, #112240 50%, #0d1f3c 100%);
+    font-family: 'Source Serif 4', serif;
+    color: #e8e0d5;
+  }
+
+  header {
+    background: rgba(0,0,0,0.5);
+    border-bottom: 2px solid var(--gold);
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .site-subtitle { color: #888; font-size: 0.78rem; letter-spacing: 2px; margin-top: 2px; }
+
+  nav { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: #aaa;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .nav-btn:hover, .nav-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+
+  .hero { text-align: center; padding: 60px 40px 40px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); margin-bottom: 12px; line-height: 1.2; }
+  .hero p { color: #aaa; font-size: 1rem; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px 60px;
+  }
+
+  .level-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .level-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+
+  .card-header {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .level-badge {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-header-text h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 3px; }
+  .card-header-text p { font-size: 0.78rem; color: #888; letter-spacing: 1px; }
+
+  .card-body { padding: 20px 26px 24px; }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 18px;
+    color: #666;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .link-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .part-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #ccc;
+    font-size: 0.88rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.18s;
+  }
+  .part-link:hover { color: #fff; background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); transform: translateX(3px); }
+
+  .part-num {
+    font-size: 0.68rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    min-width: 54px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .coming-soon {
+    padding: 12px 14px;
+    border-radius: 6px;
+    color: #555;
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.01);
+    border: 1px dashed rgba(255,255,255,0.06);
+    font-style: italic;
+  }
+
+  /* COLOUR THEMES */
+  .c2 .card-header { background: var(--c2-soft); }
+  .c2 .level-badge { background: var(--c2-soft); color: var(--c2); border: 2px solid var(--c2); }
+  .c2 .card-header-text h2 { color: #e8a09a; }
+  .c2 .part-num { background: var(--c2-soft); color: #e8a09a; }
+
+  .c1 .card-header { background: var(--c1-soft); }
+  .c1 .level-badge { background: var(--c1-soft); color: var(--c1); border: 2px solid var(--c1); }
+  .c1 .card-header-text h2 { color: #f0a87a; }
+  .c1 .part-num { background: var(--c1-soft); color: #f0a87a; }
+
+  .b2 .card-header { background: var(--b2-soft); }
+  .b2 .level-badge { background: var(--b2-soft); color: var(--b2); border: 2px solid var(--b2); }
+  .b2 .card-header-text h2 { color: #7acca0; }
+  .b2 .part-num { background: var(--b2-soft); color: #7acca0; }
+
+  .b1 .card-header { background: var(--b1-soft); }
+  .b1 .level-badge { background: var(--b1-soft); color: var(--b1); border: 2px solid var(--b1); }
+  .b1 .card-header-text h2 { color: #7ab0e8; }
+  .b1 .part-num { background: var(--b1-soft); color: #7ab0e8; }
+
+  .practice .card-header { background: var(--practice-soft); }
+  .practice .level-badge { background: var(--practice-soft); color: var(--practice); border: 2px solid var(--practice); font-size: 1rem; }
+  .practice .card-header-text h2 { color: #c49ad8; }
+  .practice .part-num { background: var(--practice-soft); color: #c49ad8; }
+
+  .hidden { display: none; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2rem; }
+    .sections-grid { padding: 20px 16px 40px; gap: 20px; }
+    header { padding: 14px 16px; flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="site-title">Cambridge Exam Practice</div>
+    <div class="site-subtitle">Interactive Reading &amp; Use of English</div>
+  </div>
+  <nav>
+    <button class="nav-btn active" onclick="filterLevel('all', this)">All</button>
+    <button class="nav-btn" onclick="filterLevel('c2', this)">C2 · CPE</button>
+    <button class="nav-btn" onclick="filterLevel('c1', this)">C1 · CAE</button>
+    <button class="nav-btn" onclick="filterLevel('b2', this)">B2 · FCE</button>
+    <button class="nav-btn" onclick="filterLevel('b1', this)">B1 · PET</button>
+    <button class="nav-btn" onclick="filterLevel('practice', this)">Practice</button>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Exam Practice Hub</h1>
+  <p>Select your level and choose an exam part or practice activity. All results are saved for your teacher to review.</p>
+</div>
+
+<div class="sections-grid" id="grid">
+
+  <!-- C2 CPE -->
+  <div class="level-card c2" data-level="c2">
+    <div class="card-header">
+      <div class="level-badge">C2</div>
+      <div class="card-header-text">
+        <h2>CPE · Cambridge Proficiency</h2>
+        <p>READING &amp; USE OF ENGLISH · EXAM 1</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Parts 1–4 · Use of English</div>
+      <div class="link-list">
+        <a class="part-link" href="cpe_full_1_part1.html"><span class="part-num">PART 1</span> Multiple Choice Cloze</a>
+        <a class="part-link" href="cpe_full_1_part2.html"><span class="part-num">PART 2</span> Open Cloze</a>
+        <a class="part-link" href="cpe_full_1_part3.html"><span class="part-num">PART 3</span> Word Formation</a>
+        <a class="part-link" href="cpe_full_1_part4.html"><span class="part-num">PART 4</span> Key Word Transformations</a>
+      </div>
+      <div class="section-label">Parts 5–7 · Reading</div>
+      <div class="link-list">
+        <a class="part-link" href="cpe_part5_quiz.html"><span class="part-num">PART 5</span> Multiple Choice · Comedians</a>
+        <a class="part-link" href="cpe_part6_quiz.html"><span class="part-num">PART 6</span> Gapped Text · Husband &amp; Wife</a>
+        <a class="part-link" href="cpe_part7_quiz.html"><span class="part-num">PART 7</span> Multiple Matching · Kents Cavern</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE TESTS -->
+  <div class="level-card practice" data-level="practice">
+    <div class="card-header">
+      <div class="level-badge">✦</div>
+      <div class="card-header-text">
+        <h2>Practice Activities</h2>
+        <p>USE OF ENGLISH · MIXED PRACTICE</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Available Tests</div>
+      <div class="link-list">
+        <a class="part-link" href="practice_test_1.html"><span class="part-num">TEST 1</span> Practice Test 1</a>
+        <a class="part-link" href="practice_test_2.html"><span class="part-num">TEST 2</span> Practice Test 2</a>
+        <a class="part-link" href="practice_test_3.html"><span class="part-num">TEST 3</span> Practice Test 3</a>
+        <a class="part-link" href="practice_test_10.html"><span class="part-num">TEST 10</span> Practice Test 10</a>
+        <a class="part-link" href="practice_test_13.html"><span class="part-num">TEST 13</span> Practice Test 13</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 CAE -->
+  <div class="level-card c1" data-level="c1">
+    <div class="card-header">
+      <div class="level-badge">C1</div>
+      <div class="card-header-text">
+        <h2>CAE · Cambridge Advanced</h2>
+        <p>READING &amp; USE OF ENGLISH · EXAM 1</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Parts 1–4 · Use of English</div>
+      <div class="link-list">
+        <a class="part-link" href="cae_full_1_part1.html"><span class="part-num">PART 1</span> Multiple Choice Cloze</a>
+        <a class="part-link" href="cae_full_1_part2.html"><span class="part-num">PART 2</span> Open Cloze</a>
+        <a class="part-link" href="cae_full_1_part3.html"><span class="part-num">PART 3</span> Word Formation</a>
+        <a class="part-link" href="cae_full_1_part4.html"><span class="part-num">PART 4</span> Key Word Transformations</a>
+      </div>
+      <div class="section-label">Parts 5–8 · Reading</div>
+      <div class="link-list">
+        <div class="coming-soon">Parts 5–8 will appear here as they are uploaded</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 FCE -->
+  <div class="level-card b2" data-level="b2">
+    <div class="card-header">
+      <div class="level-badge">B2</div>
+      <div class="card-header-text">
+        <h2>FCE · Cambridge First</h2>
+        <p>READING &amp; USE OF ENGLISH · PARTS 1–7</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Coming Soon</div>
+      <div class="link-list">
+        <div class="coming-soon">Parts 1–7 will appear here as they are uploaded</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B1 PET -->
+  <div class="level-card b1" data-level="b1">
+    <div class="card-header">
+      <div class="level-badge">B1</div>
+      <div class="card-header-text">
+        <h2>PET · Cambridge Preliminary</h2>
+        <p>READING &amp; USE OF ENGLISH</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Coming Soon</div>
+      <div class="link-list">
+        <div class="coming-soon">Activities will appear here as they are uploaded</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function filterLevel(level, btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.level-card').forEach(card => {
+      if (level === 'all' || card.dataset.level === level) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

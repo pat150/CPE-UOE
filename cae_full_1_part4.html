@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CAE Part 4 – Key Word Transformations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Source Serif 4', serif; color: #e8e0d5; }
+  header { background: rgba(0,0,0,0.4); border-bottom: 2px solid #c9a84c; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Playfair Display', serif; color: #c9a84c; letter-spacing: 3px; font-size: 1rem; text-transform: uppercase; }
+  .header-btn { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 18px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; letter-spacing: 1px; font-family: inherit; }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 36px; max-width: 780px; margin: 40px auto; backdrop-filter: blur(8px); }
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
+  input[type="text"], input[type="password"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.5); border-radius: 4px; color: #e8e0d5; font-size: 1rem; font-family: inherit; margin-bottom: 20px; }
+  input::placeholder { color: #888; }
+  .btn-primary { background: #c9a84c; color: #0f2027; border: none; padding: 12px 32px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; font-family: inherit; }
+  .btn-primary:hover { background: #d9bb6a; }
+  .question-block { margin-bottom: 24px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
+  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 12px; }
+  .original-sentence { font-size: 0.95rem; color: #ddd; margin-bottom: 10px; line-height: 1.6; }
+  .key-word { display: inline-block; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); border-radius: 4px; padding: 2px 10px; color: #c9a84c; font-weight: bold; letter-spacing: 2px; font-size: 0.85rem; margin: 8px 0; }
+  .transformed-sentence { font-size: 0.95rem; color: #ddd; margin-top: 10px; line-height: 1.6; }
+  .open-input { background: rgba(255,255,255,0.08); border: 1px solid rgba(201,168,76,0.4); border-radius: 4px; color: #e8e0d5; font-size: 0.95rem; font-family: inherit; padding: 7px 12px; width: 100%; margin-top: 8px; }
+  .open-input:focus { outline: none; border-color: #c9a84c; }
+  .score-box { text-align: center; padding: 30px 10px; }
+  .big-score { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: #c9a84c; }
+  .result-block { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.88rem; }
+  .result-block .q-label { color: #c9a84c; font-weight: bold; margin-bottom: 6px; font-size: 0.8rem; }
+  .correct { color: #6fcf97; font-weight: bold; }
+  .wrong { color: #eb5757; font-weight: bold; }
+  .gold { color: #c9a84c; }
+  .key-editor { margin-bottom: 28px; padding: 20px; background: rgba(201,168,76,0.06); border-radius: 6px; border: 1px solid rgba(201,168,76,0.3); }
+  .key-block { margin-bottom: 16px; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); }
+  .key-input { background: #1a2a35; color: #e8e0d5; border: 1px solid #c9a84c; border-radius: 3px; padding: 6px 10px; font-family: inherit; width: 100%; margin-top: 6px; font-size: 0.9rem; }
+  .sub-card { margin-bottom: 22px; padding: 20px; background: rgba(255,255,255,0.04); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+  .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1.05rem; font-weight: bold; }
+  .sub-score { color: #c9a84c; font-weight: bold; margin-left: 12px; }
+  .sub-time { color: #777; font-size: 0.8rem; margin-left: 12px; }
+  .sub-ans-row { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem; }
+  .btn-sm { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 5px 14px; cursor: pointer; border-radius: 3px; font-size: 0.8rem; font-family: inherit; }
+  .btn-sm:hover { background: rgba(201,168,76,0.15); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 16px; font-size: 0.9rem; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .progress { color: #aaa; font-size: 0.85rem; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .home-link { display: inline-block; margin-bottom: 20px; color: #c9a84c; font-size: 0.85rem; text-decoration: none; letter-spacing: 1px; }
+  .home-link:hover { text-decoration: underline; }
+  .note { color: #888; font-size: 0.82rem; margin-bottom: 20px; font-style: italic; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">CAE · Paper 1 · Part 4</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">← Back to Home</a>
+    <h1>Key Word Transformations</h1>
+    <p class="subtitle">Questions 25–30 · Complete the second sentence using the key word</p>
+    <input type="text" id="student-name" placeholder="Enter your full name..."/>
+    <button class="btn-primary" onclick="startQuiz()">Start Exercise →</button>
+  </div>
+</div>
+
+<div id="page-quiz" class="page">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <h1>Questions 25–30</h1>
+      <span class="progress" id="progress-label">0/6 answered</span>
+    </div>
+    <p class="subtitle" style="margin-bottom:8px;">Complete the second sentence so that it has a similar meaning to the first, using the key word. Use between three and six words including the key word.</p>
+    <p class="note">Do not change the key word. Write only the missing words.</p>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()">Submit Answers →</button>
+  </div>
+</div>
+
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:8px;margin-bottom:28px;">Your answers have been submitted. Your teacher will review them.</div>
+      <div id="done-breakdown"></div>
+      <button class="btn-primary" style="margin-top:28px;" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-login" class="page">
+  <div class="card" style="max-width:420px;">
+    <h1>Teacher Login</h1>
+    <p class="subtitle" style="margin-bottom:20px;">Enter your password to view submissions</p>
+    <input type="password" id="admin-pass" placeholder="Password..." onkeydown="if(event.key==='Enter')adminLogin()"/>
+    <div class="error-msg" id="login-error" style="display:none;"></div>
+    <button class="btn-primary" onclick="adminLogin()">Login</button>
+    <p class="hint">Default password: <strong>teacher123</strong></p>
+  </div>
+</div>
+
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">ANSWER KEY <span style="color:#888;font-size:0.8rem;font-weight:normal;">(for your reference — mark manually)</span></div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">STUDENT SUBMISSIONS</div>
+    <div id="submissions-container"><p style="color:#888;">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+  const QUESTIONS = [
+    {
+      num: 25,
+      original: "I thought Sue's original plan was to move to Australia.",
+      keyword: "IMPRESSION",
+      start: "I",
+      end: "was originally planning to move to Australia.",
+      key: "was under / had (got) the impression that Sue"
+    },
+    {
+      num: 26,
+      original: "Mr Smith was well-known as a bad-tempered man, but he was also fair.",
+      keyword: "REPUTATION",
+      start: "Despite",
+      end: "bad-tempered, Mr Smith was also fair.",
+      key: "(his/him) having a/his reputation for being"
+    },
+    {
+      num: 27,
+      original: "It looks like you didn't sleep well last night.",
+      keyword: "IF",
+      start: "You look",
+      end: "much sleep last night.",
+      key: "as if you did not/didn't get/have"
+    },
+    {
+      num: 28,
+      original: "I don't believe that Jane ran that distance in only five minutes!",
+      keyword: "POSSIBLY",
+      start: "Jane",
+      end: "that distance in only five minutes!",
+      key: "can't/couldn't possibly have run"
+    },
+    {
+      num: 29,
+      original: "Andrew's lawyer suggested that he ignored the reporters.",
+      keyword: "ATTENTION",
+      start: "Andrew's lawyer advised",
+      end: "the reporters.",
+      key: "him to pay no / him not to pay / him against paying attention to"
+    },
+    {
+      num: 30,
+      original: "I doubt that Simon will lend us the money.",
+      keyword: "CHANCE",
+      start: "I think",
+      end: "Simon lending the money to us.",
+      key: "there is little / not much chance of"
+    },
+  ];
+
+  let studentAnswers = {}, currentStudent = "";
+  let submissions = JSON.parse(localStorage.getItem("cae_p4_subs") || "[]");
+  let editingId = null, editTemp = {};
+
+  function saveData() { localStorage.setItem("cae_p4_subs", JSON.stringify(submissions)); }
+  function goTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    const hr = document.getElementById('header-right');
+    if (page==='admin') hr.innerHTML='<button class="header-btn" onclick="goTo(\'home\')">Logout</button>';
+    else hr.innerHTML='<button class="header-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+  }
+  function goHome() { currentStudent=""; studentAnswers={}; document.getElementById('student-name').value=""; goTo('home'); }
+  function startQuiz() {
+    const name = document.getElementById('student-name').value.trim();
+    if (!name) { alert('Please enter your name.'); return; }
+    currentStudent = name; studentAnswers = {}; renderQuestions(); goTo('quiz');
+  }
+  function renderQuestions() {
+    const c = document.getElementById('questions-container'); c.innerHTML='';
+    QUESTIONS.forEach(q => {
+      const b = document.createElement('div'); b.className='question-block';
+      b.innerHTML=`
+        <div class="q-num">QUESTION ${q.num}</div>
+        <div class="original-sentence">${q.original}</div>
+        <div class="key-word">${q.keyword}</div>
+        <div class="transformed-sentence">${q.start} ................................................ ${q.end}</div>
+        <input class="open-input" id="ans-${q.num}" type="text" placeholder="Type the missing words..." oninput="trackAnswer(${q.num},this.value)" autocomplete="off"/>`;
+      c.appendChild(b);
+    });
+  }
+  function trackAnswer(qNum, val) {
+    studentAnswers[qNum] = val;
+    const filled = QUESTIONS.filter(q => studentAnswers[q.num] && studentAnswers[q.num].trim()).length;
+    const lbl = document.getElementById('progress-label');
+    if (lbl) lbl.textContent = filled+'/6 answered';
+  }
+  function submitQuiz() {
+    const missing = QUESTIONS.filter(q => !studentAnswers[q.num] || !studentAnswers[q.num].trim()).map(q=>q.num);
+    if (missing.length) { alert('Please answer all questions. Missing: Q'+missing.join(', Q')); return; }
+    const sub = { id:Date.now(), name:currentStudent, answers:{...studentAnswers}, score:'—', total:6, submittedAt:new Date().toLocaleString() };
+    submissions.push(sub); saveData(); showResult(sub); goTo('submitted');
+  }
+  function showResult(sub) {
+    document.getElementById('done-name').textContent='Well done, '+sub.name+'!';
+    document.getElementById('done-score').textContent='✓';
+    let html='';
+    QUESTIONS.forEach(q => {
+      html+=`<div class="result-block">
+        <div class="q-label">Q${q.num} · ${q.keyword}</div>
+        <div>Your answer: <span class="gold">${sub.answers[q.num]}</span></div>
+        <div style="margin-top:4px;color:#888;font-size:0.82rem;">Model answer: ${q.key}</div>
+      </div>`;
+    });
+    document.getElementById('done-breakdown').innerHTML=html;
+  }
+  function adminLogin() {
+    if(document.getElementById('admin-pass').value==='teacher123'){
+      document.getElementById('login-error').style.display='none';
+      renderAdmin(); goTo('admin');
+    } else {
+      const e=document.getElementById('login-error'); e.textContent='Incorrect password.'; e.style.display='block';
+    }
+  }
+  function renderAdmin() {
+    let khtml='';
+    QUESTIONS.forEach(q => {
+      khtml+=`<div class="key-block">
+        <div style="color:#c9a84c;font-weight:bold;margin-bottom:6px;">Q${q.num} · <span style="letter-spacing:2px;">${q.keyword}</span></div>
+        <div style="color:#aaa;font-size:0.85rem;margin-bottom:4px;">${q.original}</div>
+        <div style="color:#888;font-size:0.85rem;">${q.start} <strong style="color:#c9a84c;">[${q.key}]</strong> ${q.end}</div>
+      </div>`;
+    });
+    document.getElementById('key-editor').innerHTML=khtml;
+    renderSubmissions();
+  }
+  function renderSubmissions() {
+    const cnt=document.getElementById('submissions-container');
+    document.getElementById('sub-count-label').textContent=`STUDENT SUBMISSIONS (${submissions.length})`;
+    if(!submissions.length){cnt.innerHTML='<p style="color:#888;">No submissions yet.</p>';return;}
+    let html='';
+    submissions.forEach(sub=>{
+      const isEditing=editingId===sub.id;
+      let rows='';
+      QUESTIONS.forEach(q=>{
+        const ans=isEditing?(editTemp[q.num]||sub.answers[q.num]||''):sub.answers[q.num]||'';
+        if(isEditing){
+          rows+=`<div class="sub-ans-row"><span style="color:#c9a84c;font-weight:bold;">Q${q.num}:</span> <input class="key-input" style="width:100%;margin-top:4px;" value="${ans}" onchange="editAnswer(${q.num},this.value)"/><div style="color:#666;font-size:0.8rem;margin-top:2px;">Key: ${q.key}</div></div>`;
+        } else {
+          rows+=`<div class="sub-ans-row"><span style="color:#c9a84c;font-weight:bold;">Q${q.num} (${q.keyword}):</span> <span style="color:#ddd;">${ans}</span><div style="color:#666;font-size:0.8rem;margin-top:2px;">Key: ${q.key}</div></div>`;
+        }
+      });
+      const btns=isEditing
+        ?`<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button><button class="btn-sm" onclick="cancelEdit()">Cancel</button>`
+        :`<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button>`;
+      html+=`<div class="sub-card"><div class="sub-header"><div><span class="sub-name">${sub.name}</span><span class="sub-time">${sub.submittedAt}</span></div><div style="display:flex;gap:8px;">${btns}</div></div>${rows}</div>`;
+    });
+    cnt.innerHTML=html;
+  }
+  function startEdit(id){editingId=id;editTemp={...submissions.find(s=>s.id===id).answers};renderSubmissions();}
+  function editAnswer(qNum,val){editTemp[qNum]=val;}
+  function saveEdit(id){
+    const idx=submissions.findIndex(s=>s.id===id);
+    if(idx>-1){submissions[idx].answers={...editTemp};saveData();}
+    editingId=null;editTemp={};renderSubmissions();
+  }
+  function cancelEdit(){editingId=null;editTemp={};renderSubmissions();}
+  function deleteSub(id){if(!confirm('Delete?'))return;submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();}
+</script>
+</body>
+</html>
