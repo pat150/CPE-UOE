@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPE Part 6 – Husband and Wife Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: 'Source Serif 4', serif;
+    color: #e8e0d5;
+  }
+
+  header {
+    background: rgba(0,0,0,0.4);
+    border-bottom: 2px solid #c9a84c;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    color: #c9a84c;
+    letter-spacing: 3px;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .header-btn {
+    background: transparent;
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    padding: 6px 18px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    font-family: inherit;
+  }
+  .header-btn:hover { background: rgba(201,168,76,0.15); }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 10px;
+    padding: 36px;
+    max-width: 780px;
+    margin: 40px auto;
+    backdrop-filter: blur(8px);
+  }
+
+  h1 { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 1.7rem; margin-bottom: 6px; }
+  .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 28px; }
+
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 4px;
+    color: #e8e0d5;
+    font-size: 1rem;
+    font-family: inherit;
+    margin-bottom: 20px;
+  }
+  input::placeholder { color: #888; }
+
+  .btn-primary {
+    background: #c9a84c;
+    color: #0f2027;
+    border: none;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    font-family: inherit;
+  }
+  .btn-primary:hover { background: #d9bb6a; }
+
+  .question-block {
+    margin-bottom: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .q-num { color: #c9a84c; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 8px; }
+  .q-text { font-size: 0.95rem; margin-bottom: 14px; line-height: 1.6; color: #ccc; font-style: italic; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .option:hover { background: rgba(201,168,76,0.1); }
+  .option.selected { background: rgba(201,168,76,0.2); border-color: #c9a84c; }
+  .option-letter { font-weight: bold; color: #888; min-width: 20px; flex-shrink: 0; }
+  .option.selected .option-letter { color: #c9a84c; }
+
+  .score-box { text-align: center; padding: 30px 10px; }
+  .big-score { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: #c9a84c; }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-size: 0.92rem;
+  }
+  .correct { color: #6fcf97; font-weight: bold; }
+  .wrong { color: #eb5757; font-weight: bold; }
+  .gold { color: #c9a84c; font-weight: bold; }
+
+  .key-editor {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: rgba(201,168,76,0.06);
+    border-radius: 6px;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .key-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; }
+  .key-opt {
+    cursor: pointer;
+    padding: 4px 14px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    color: #aaa;
+    transition: all 0.15s;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: transparent;
+  }
+  .key-opt.active { border: 2px solid #c9a84c; color: #c9a84c; font-weight: bold; }
+
+  .sub-card {
+    margin-bottom: 22px;
+    padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .sub-name { font-size: 1.05rem; font-weight: bold; }
+  .sub-score { color: #c9a84c; font-weight: bold; margin-left: 12px; }
+  .sub-time { color: #777; font-size: 0.8rem; margin-left: 12px; }
+
+  .ans-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { text-align: center; min-width: 60px; }
+  .pill-label { font-size: 0.72rem; color: #888; margin-bottom: 4px; }
+  .pill-val {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  .pill-val.ok { background: rgba(111,207,151,0.2); border: 2px solid #6fcf97; color: #6fcf97; }
+  .pill-val.bad { background: rgba(235,87,87,0.2); border: 2px solid #eb5757; color: #eb5757; }
+
+  .edit-sel {
+    background: #1a2a35;
+    color: #e8e0d5;
+    border: 1px solid #c9a84c;
+    border-radius: 3px;
+    padding: 4px 6px;
+    font-family: inherit;
+    width: auto;
+  }
+
+  .btn-sm {
+    background: transparent;
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    padding: 5px 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-family: inherit;
+  }
+  .btn-sm:hover { background: rgba(201,168,76,0.15); }
+  .btn-sm.danger { border-color: #eb5757; color: #eb5757; }
+  .btn-sm.danger:hover { background: rgba(235,87,87,0.15); }
+  .btn-sm.success { border-color: #6fcf97; color: #6fcf97; }
+
+  .section-title { color: #c9a84c; font-weight: bold; letter-spacing: 1px; margin-bottom: 16px; font-size: 0.9rem; }
+  .hint { color: #888; font-size: 0.8rem; margin-top: 14px; }
+  .error-msg { color: #eb5757; margin-bottom: 12px; font-size: 0.9rem; }
+  .progress { color: #aaa; font-size: 0.85rem; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .instruction-box {
+    background: rgba(201,168,76,0.07);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 0.88rem;
+    color: #bbb;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">CPE · Paper 1 · Part 6</span>
+  <div id="header-right">
+    <button class="header-btn" onclick="goTo('login')">Teacher Login</button>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="card">
+    <h1>Gapped Text Exercise</h1>
+    <p class="subtitle">Husband and Wife — Questions 37–43 &nbsp;·&nbsp; Choose the paragraph (A–H) that fits each gap</p>
+    <input type="text" id="student-name" placeholder="Enter your full name..." />
+    <br>
+    <button class="btn-primary" onclick="startQuiz()">Start Exercise →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="page-quiz" class="page">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <h1>Questions 37–43</h1>
+      <span class="progress" id="progress-label">0/7 answered</span>
+    </div>
+    <p class="subtitle" style="margin-bottom:16px;">Select the paragraph (A–H) that best fits each gap. One paragraph is not used.</p>
+    <div class="instruction-box">
+      <strong style="color:#c9a84c;">Paragraphs A–H</strong><br>
+      <strong>A</strong> Not very inspiring, he thought guiltily, assessing the situation in the light of Joan's projected foray into the world of work...<br>
+      <strong>B</strong> 'Nonsense,' he said. 'We've always said you would, when the children were old enough...'<br>
+      <strong>C</strong> She went back to her book. Thanet picked up the newspaper. He hadn't been reading for more than a few minutes, however, when he realised that Joan was unusually restless...<br>
+      <strong>D</strong> 'I wanted to speak to you about it first. Oh, darling,' and she came to kneel before him, took his hands, 'you're sure you don't mind?'<br>
+      <strong>E</strong> He grinned. 'To be honest, yes. But I know what you mean.' 'Do you?' she said eagerly. 'You don't think I'm being stupid?'<br>
+      <strong>F</strong> And so it was that on this blustery March evening, blissfully unaware of the nasty little shock that Fate was preparing for him, he stretched his toes out to the fire...<br>
+      <strong>G</strong> And she was right, of course, he was. They had been married for eight years now and for all that time Joan had been the good little wife who stayed at home...<br>
+      <strong>H</strong> To his surprise, she still did not respond. 'Joan?' He was beginning to feel the first faint stirrings of alarm. She shook her head slowly then, a fierce little shake...
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()">Submit Answers →</button>
+  </div>
+</div>
+
+<!-- SUBMITTED -->
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score" id="done-score"></div>
+      <div style="color:#aaa;margin-top:8px;margin-bottom:28px;">Your answers have been submitted.</div>
+      <div id="done-breakdown"></div>
+      <button class="btn-primary" style="margin-top:28px;" onclick="goHome()">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="card" style="max-width:420px;">
+    <h1>Teacher Login</h1>
+    <p class="subtitle" style="margin-bottom:20px;">Enter your password to view submissions</p>
+    <input type="password" id="admin-pass" placeholder="Password..." onkeydown="if(event.key==='Enter')adminLogin()" />
+    <div class="error-msg" id="login-error" style="display:none;"></div>
+    <button class="btn-primary" onclick="adminLogin()">Login</button>
+    <p class="hint">Default password: <strong>teacher123</strong></p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">ANSWER KEY</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">STUDENT SUBMISSIONS</div>
+    <div id="submissions-container"><p style="color:#888;">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+  const QUESTIONS = [
+    { num: 37, context: "Detective Inspector Luke Thanet was a happy man... [gap 37] ...Reaching for his pipe, he tapped it out..." },
+    { num: 38, context: "'Book no good?' Thanet enquired... [gap 38] ...'Oh?' he said, warily." },
+    { num: 39, context: "She looked at him with something approaching desperation... [gap 39] ...'Oh?' he said, warily. She looked at him..." },
+    { num: 40, context: "Now, in a flash, he saw all of that changing... [gap 40] ...'No. Oh, I did consider it seriously...' " },
+    { num: 41, context: "'No. Oh, I did consider it seriously... [gap 41] ...'Not in the least. What sort of thing did you have in mind?'" },
+    { num: 42, context: "'Not in the least... [gap 42] ...'Yes, I can see that. You haven't gone into it yet, then?'" },
+    { num: 43, context: "'Yes, I can see that. You haven't gone into it yet, then?' [gap 43] ...Very much later, he told himself, as he drove to work next morning." },
+  ];
+
+  const OPTIONS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+  let correctAnswers = { 37: "F", 38: "C", 39: "D", 40: "G", 41: "B", 42: "H", 43: "A" };
+  let studentAnswers = {};
+  let currentStudent = "";
+  let submissions = JSON.parse(localStorage.getItem("cpe_p6_submissions") || "[]");
+  let editingId = null;
+  let editTemp = {};
+
+  function saveData() { localStorage.setItem("cpe_p6_submissions", JSON.stringify(submissions)); }
+
+  function goTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    const hr = document.getElementById('header-right');
+    if (page === 'admin') {
+      hr.innerHTML = '<button class="header-btn" onclick="goTo(\'home\');document.getElementById(\'admin-pass\').value=\'\'">Logout</button>';
+    } else if (page === 'quiz') {
+      hr.innerHTML = '<span class="progress" id="header-progress">0/7</span>';
+    } else {
+      hr.innerHTML = '<button class="header-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+    }
+  }
+
+  function goHome() {
+    currentStudent = "";
+    studentAnswers = {};
+    document.getElementById('student-name').value = "";
+    goTo('home');
+  }
+
+  function startQuiz() {
+    const name = document.getElementById('student-name').value.trim();
+    if (!name) { alert('Please enter your name.'); return; }
+    currentStudent = name;
+    studentAnswers = {};
+    renderQuestions();
+    goTo('quiz');
+  }
+
+  function renderQuestions() {
+    const container = document.getElementById('questions-container');
+    container.innerHTML = '';
+    QUESTIONS.forEach(q => {
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      let optsHtml = '';
+      OPTIONS.forEach(letter => {
+        optsHtml += `<div class="option" id="opt-${q.num}-${letter}" onclick="selectAnswer(${q.num},'${letter}')">
+          <span class="option-letter">${letter}</span>
+        </div>`;
+      });
+      block.innerHTML = `
+        <div class="q-num">GAP ${q.num}</div>
+        <div class="q-text">${q.context}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">${optsHtml}</div>`;
+      container.appendChild(block);
+    });
+  }
+
+  function selectAnswer(qNum, letter) {
+    OPTIONS.forEach(l => {
+      const el = document.getElementById(`opt-${qNum}-${l}`);
+      if (el) el.classList.remove('selected');
+    });
+    document.getElementById(`opt-${qNum}-${letter}`).classList.add('selected');
+    studentAnswers[qNum] = letter;
+    const count = Object.keys(studentAnswers).length;
+    const lbl = document.getElementById('progress-label');
+    if (lbl) lbl.textContent = count + '/7 answered';
+  }
+
+  function submitQuiz() {
+    const missing = QUESTIONS.filter(q => !studentAnswers[q.num]).map(q => q.num);
+    if (missing.length) { alert('Please answer all gaps. Missing: ' + missing.join(', ')); return; }
+    const score = QUESTIONS.filter(q => studentAnswers[q.num] === correctAnswers[q.num]).length;
+    const sub = { id: Date.now(), name: currentStudent, answers: {...studentAnswers}, score, total: 7, submittedAt: new Date().toLocaleString() };
+    submissions.push(sub);
+    saveData();
+    showResult(sub);
+    goTo('submitted');
+  }
+
+  function showResult(sub) {
+    document.getElementById('done-name').textContent = 'Well done, ' + sub.name + '!';
+    document.getElementById('done-score').textContent = sub.score + '/7';
+    let html = '';
+    QUESTIONS.forEach(q => {
+      const chosen = sub.answers[q.num];
+      const correct = correctAnswers[q.num];
+      const ok = chosen === correct;
+      html += `<div class="result-row">
+        <span>Gap ${q.num}</span>
+        <span>Your answer: <span class="${ok ? 'correct' : 'wrong'}">${chosen}</span></span>
+        <span>Correct: <span class="gold">${correct}</span></span>
+        <span>${ok ? '✓' : '✗'}</span>
+      </div>`;
+    });
+    document.getElementById('done-breakdown').innerHTML = html;
+  }
+
+  function adminLogin() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === 'teacher123') {
+      document.getElementById('login-error').style.display = 'none';
+      renderAdmin();
+      goTo('admin');
+    } else {
+      const err = document.getElementById('login-error');
+      err.textContent = 'Incorrect password.';
+      err.style.display = 'block';
+    }
+  }
+
+  function renderAdmin() {
+    const ke = document.getElementById('key-editor');
+    let khtml = '';
+    QUESTIONS.forEach(q => {
+      let btns = OPTIONS.map(l =>
+        `<button class="key-opt ${correctAnswers[q.num]===l?'active':''}" onclick="setKey(${q.num},'${l}')" id="kopt-${q.num}-${l}">${l}</button>`
+      ).join('');
+      khtml += `<div class="key-row"><span style="min-width:70px;color:#aaa;">Gap ${q.num}:</span>${btns}</div>`;
+    });
+    ke.innerHTML = khtml;
+    renderSubmissions();
+  }
+
+  function setKey(qNum, letter) {
+    correctAnswers[qNum] = letter;
+    OPTIONS.forEach(l => {
+      const el = document.getElementById(`kopt-${qNum}-${l}`);
+      if (el) el.className = 'key-opt' + (l === letter ? ' active' : '');
+    });
+    renderSubmissions();
+  }
+
+  function renderSubmissions() {
+    const cnt = document.getElementById('submissions-container');
+    document.getElementById('sub-count-label').textContent = `STUDENT SUBMISSIONS (${submissions.length})`;
+    if (!submissions.length) { cnt.innerHTML = '<p style="color:#888;">No submissions yet.</p>'; return; }
+    let html = '';
+    submissions.forEach((sub) => {
+      const score = QUESTIONS.filter(q => sub.answers[q.num] === correctAnswers[q.num]).length;
+      const isEditing = editingId === sub.id;
+      let pills = '';
+      QUESTIONS.forEach(q => {
+        const chosen = isEditing ? (editTemp[q.num] || sub.answers[q.num]) : sub.answers[q.num];
+        const correct = correctAnswers[q.num];
+        if (isEditing) {
+          pills += `<div class="pill"><div class="pill-label">Gap ${q.num}</div>
+            <select class="edit-sel" onchange="editAnswer(${q.num},this.value)">
+              ${OPTIONS.map(l=>`<option value="${l}"${chosen===l?' selected':''}>${l}</option>`).join('')}
+            </select></div>`;
+        } else {
+          const ok = chosen === correct;
+          pills += `<div class="pill"><div class="pill-label">Gap ${q.num}</div><div class="pill-val ${ok?'ok':'bad'}">${chosen}</div></div>`;
+        }
+      });
+      const actionBtns = isEditing
+        ? `<button class="btn-sm success" onclick="saveEdit(${sub.id})">Save</button>
+           <button class="btn-sm" onclick="cancelEdit()">Cancel</button>`
+        : `<button class="btn-sm" onclick="startEdit(${sub.id})">Edit</button>
+           <button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button>`;
+
+      html += `<div class="sub-card">
+        <div class="sub-header">
+          <div><span class="sub-name">${sub.name}</span><span class="sub-score">${score}/7</span><span class="sub-time">${sub.submittedAt}</span></div>
+          <div style="display:flex;gap:8px;">${actionBtns}</div>
+        </div>
+        <div class="ans-pills">${pills}</div>
+      </div>`;
+    });
+    cnt.innerHTML = html;
+  }
+
+  function startEdit(id) {
+    editingId = id;
+    const sub = submissions.find(s => s.id === id);
+    editTemp = {...sub.answers};
+    renderSubmissions();
+  }
+
+  function editAnswer(qNum, val) { editTemp[qNum] = val; }
+
+  function saveEdit(id) {
+    const idx = submissions.findIndex(s => s.id === id);
+    if (idx > -1) {
+      submissions[idx].answers = {...editTemp};
+      submissions[idx].score = QUESTIONS.filter(q => editTemp[q.num] === correctAnswers[q.num]).length;
+      saveData();
+    }
+    editingId = null; editTemp = {};
+    renderSubmissions();
+  }
+
+  function cancelEdit() { editingId = null; editTemp = {}; renderSubmissions(); }
+
+  function deleteSub(id) {
+    if (!confirm('Delete this submission?')) return;
+    submissions = submissions.filter(s => s.id !== id);
+    saveData();
+    renderSubmissions();
+  }
+</script>
+</body>
+</html>
