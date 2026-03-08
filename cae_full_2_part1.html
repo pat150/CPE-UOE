@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAE Reading & Use of English — Part 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f7f4ef;
+    --cream: #eee9e0;
+    --accent: #8b1a1a;
+    --gold: #c4963a;
+    --blue: #1c3f6e;
+    --mid: #5a5a6e;
+    --correct: #1a5c2e;
+    --correct-bg: #eaf5ee;
+    --strong: #7a3000;
+    --strong-bg: #fff4ec;
+    --weak: #4a4a00;
+    --weak-bg: #fafaec;
+    --obvious: #2a2a4a;
+    --obvious-bg: #f0f0f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Decorative top bar */
+  .top-bar {
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--blue));
+  }
+
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.015) 40px,
+      rgba(255,255,255,0.015) 80px
+    );
+  }
+
+  .exam-label {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(247,244,239,0.65);
+  }
+
+  /* Toggle */
+  .toggle-bar {
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .toggle-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    font-weight: 600;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    margin: 0 0.5rem;
+  }
+
+  .toggle-switch input { display: none; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    left: 4px; top: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
+
+  /* Main layout */
+  main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* Directions box */
+  .directions {
+    background: white;
+    border-left: 4px solid var(--blue);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2.5rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .directions strong { color: var(--blue); }
+
+  /* Text passage */
+  .passage-wrapper {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px;
+    padding: 2rem 2.2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .passage-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--blue);
+    text-align: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .passage p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.85;
+    text-align: justify;
+  }
+
+  .gap-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: 'Source Serif 4', serif;
+    vertical-align: middle;
+    margin: 0 1px;
+    flex-shrink: 0;
+  }
+
+  .gap-num.example {
+    background: var(--gold);
+  }
+
+  .gap-blank {
+    display: inline-block;
+    width: 60px;
+    border-bottom: 2px solid var(--ink);
+    vertical-align: middle;
+    margin: 0 2px;
+  }
+
+  /* Example */
+  .example-box {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .example-box .q-header {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .example-note {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--mid);
+  }
+
+  /* Questions */
+  .question {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 8px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+  }
+
+  .question:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+
+  .q-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--cream);
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .option:hover { background: var(--cream); border-color: rgba(0,0,0,0.15); }
+
+  .option.selected { background: #e8eef7; border-color: var(--blue); }
+  .option.correct-answer { background: var(--correct-bg); border-color: var(--correct); }
+  .option.wrong-answer { background: #fdf0f0; border-color: #cc4444; }
+
+  .opt-letter {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--mid);
+    min-width: 18px;
+  }
+
+  /* Teacher section */
+  .teacher-section { display: none; }
+  .teacher-section.visible { display: block; }
+
+  .answer-summary {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .answer-summary h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .answer-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .answer-cell {
+    text-align: center;
+    padding: 0.5rem 0.3rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .answer-cell .gap { font-size: 0.7rem; color: rgba(247,244,239,0.5); margin-bottom: 0.2rem; }
+  .answer-cell .ans { font-weight: 700; font-size: 0.9rem; color: var(--gold); }
+
+  .distribution {
+    font-size: 0.8rem;
+    color: rgba(247,244,239,0.5);
+    font-style: italic;
+    text-align: right;
+  }
+
+  /* Rationale cards */
+  .rationale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--cream);
+  }
+
+  .rationale-card {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .rationale-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .rationale-gap {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 2rem;
+  }
+
+  .rationale-answer {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--correct);
+    background: var(--correct-bg);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .rationale-body {
+    padding: 1rem 1.4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .distractor-tag {
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .distractor-tag .tag-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .tag-correct { background: var(--correct-bg); color: var(--correct); }
+  .tag-correct .tag-label { color: var(--correct); }
+  .tag-strong { background: var(--strong-bg); color: var(--strong); }
+  .tag-strong .tag-label { color: var(--strong); }
+  .tag-weak { background: var(--weak-bg); color: var(--weak); }
+  .tag-weak .tag-label { color: var(--weak); }
+  .tag-obvious { background: var(--obvious-bg); color: var(--obvious); }
+  .tag-obvious .tag-label { color: var(--obvious); }
+
+  .full-correct {
+    grid-column: 1 / -1;
+  }
+
+  /* Pedagogical note */
+  .ped-note {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 1.2rem 1.5rem;
+    margin-top: 2rem;
+    font-size: 0.92rem;
+    color: var(--mid);
+    line-height: 1.7;
+  }
+
+  .ped-note strong { color: var(--ink); }
+
+  /* Section divider */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .section-divider span {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .options { grid-template-columns: 1fr; }
+    .rationale-body { grid-template-columns: 1fr; }
+    .answer-grid { grid-template-columns: repeat(4, 1fr); }
+    main { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header>
+  <div class="exam-label">Cambridge C1 Advanced — CAE</div>
+  <h1>Reading and Use of English</h1>
+  <h2>Part 1 — Multiple Choice Cloze</h2>
+</header>
+
+<div class="toggle-bar">
+  <span class="toggle-label">Student</span>
+  <label class="toggle-switch">
+    <input type="checkbox" id="teacherToggle" onchange="toggleTeacher(this)">
+    <span class="toggle-slider"></span>
+  </label>
+  <span class="toggle-label">Teacher</span>
+</div>
+
+<main>
+
+  <div class="directions">
+    <strong>Directions:</strong> For questions <strong>1–8</strong>, read the text below and decide which answer (<strong>A, B, C or D</strong>) best fits each gap. There is an example at the beginning (<strong>0</strong>). Mark your answers on the answer sheet.
+  </div>
+
+  <!-- PASSAGE -->
+  <div class="passage-wrapper">
+    <div class="passage-title">Hurling's Golden Age: Ireland in the 1990s</div>
+    <div class="passage">
+      <p>
+        Few periods in the history of Gaelic games can rival the 1990s for
+        <span class="gap-num example">0</span><span class="gap-blank"></span>
+        excitement and unpredictability. Hurling, the ancient stick-and-ball sport governed by the Gaelic Athletic Association, underwent a <em>remarkable</em> transformation during this decade, shedding its reputation as a game dominated by a handful of traditional counties. Clare, a county long accustomed to disappointment,
+        <span class="gap-num">1</span><span class="gap-blank"></span>
+        onto the scene in 1995 under the
+        <span class="gap-num">2</span><span class="gap-blank"></span>
+        leadership of Ger Loughnane,
+        <span class="gap-num">3</span><span class="gap-blank"></span>
+        their first All-Ireland title in eighty-one years in scenes of extraordinary
+        <span class="gap-num">4</span><span class="gap-blank"></span>.
+        Wexford
+        <span class="gap-num">5</span><span class="gap-blank"></span>
+        the following year, ending a 28-year drought, while Offaly cemented their standing as one of the era's most formidable sides.
+      </p>
+      <p>
+        Off the field, the GAA
+        <span class="gap-num">6</span><span class="gap-blank"></span>
+        its championship format, introducing the back-door system in 1997, which gave defeated provincial finalists a second chance at glory. Attendances
+        <span class="gap-num">7</span><span class="gap-blank"></span>
+        and television coverage expanded dramatically, bringing the sport to an entirely new generation of followers. The decade also
+        <span class="gap-num">8</span><span class="gap-blank"></span>
+        a new era of inter-county rivalry that would define the sport well into the following century.
+      </p>
+    </div>
+  </div>
+
+  <!-- EXAMPLE -->
+  <div class="example-box">
+    <div class="q-header">Example &nbsp;(0)</div>
+    <div class="options">
+      <div class="option"><span class="opt-letter">A</span> outstanding</div>
+      <div class="option correct-answer"><span class="opt-letter">B</span> remarkable ✓</div>
+      <div class="option"><span class="opt-letter">C</span> notable</div>
+      <div class="option"><span class="opt-letter">D</span> significant</div>
+    </div>
+    <div class="example-note">Answer: B — <em>'remarkable transformation'</em> is the natural C1 collocation. The others are possible adjectives but do not collocate as precisely with 'transformation' in this register.</div>
+  </div>
+
+  <div class="section-divider"><span>Questions 1 – 8</span></div>
+
+  <!-- QUESTIONS -->
+  <div id="questions">
+
+    <div class="question" data-q="1" data-correct="A">
+      <div class="q-number">Question 1</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> burst</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> came</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> arrived</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> emerged</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="2" data-correct="C">
+      <div class="q-number">Question 2</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> stubborn</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> forceful</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> driven</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> lively</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="3" data-correct="D">
+      <div class="q-number">Question 3</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> obtaining</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> achieving</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> grabbing</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> clinching</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="4" data-correct="A">
+      <div class="q-number">Question 4</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> jubilation</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> celebration</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> elation</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> excitement</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="5" data-correct="B">
+      <div class="q-number">Question 5</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> caught on</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> followed suit</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> fell in line</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> kept pace</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="6" data-correct="C">
+      <div class="q-number">Question 6</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> reformed</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> revised</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> overhauled</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> restructured</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="7" data-correct="D">
+      <div class="q-number">Question 7</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> rose</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> climbed</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> increased</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> soared</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="8" data-correct="B">
+      <div class="q-number">Question 8</div>
+      <div class="options">
+        <div class="option" onclick="select(this)" data-opt="A"><span class="opt-letter">A</span> launched</div>
+        <div class="option" onclick="select(this)" data-opt="B"><span class="opt-letter">B</span> signalled</div>
+        <div class="option" onclick="select(this)" data-opt="C"><span class="opt-letter">C</span> ushered in</div>
+        <div class="option" onclick="select(this)" data-opt="D"><span class="opt-letter">D</span> sparked off</div>
+      </div>
+    </div>
+
+  </div><!-- /questions -->
+
+  <!-- TEACHER SECTION -->
+  <div class="teacher-section" id="teacherSection">
+
+    <div class="section-divider"><span>Teacher's Version</span></div>
+
+    <div class="answer-summary">
+      <h3>Answer Key — Summary</h3>
+      <div class="answer-grid">
+        <div class="answer-cell"><div class="gap">Gap 1</div><div class="ans">A</div></div>
+        <div class="answer-cell"><div class="gap">Gap 2</div><div class="ans">C</div></div>
+        <div class="answer-cell"><div class="gap">Gap 3</div><div class="ans">D</div></div>
+        <div class="answer-cell"><div class="gap">Gap 4</div><div class="ans">A</div></div>
+        <div class="answer-cell"><div class="gap">Gap 5</div><div class="ans">B</div></div>
+        <div class="answer-cell"><div class="gap">Gap 6</div><div class="ans">C</div></div>
+        <div class="answer-cell"><div class="gap">Gap 7</div><div class="ans">D</div></div>
+        <div class="answer-cell"><div class="gap">Gap 8</div><div class="ans">B</div></div>
+      </div>
+      <div class="distribution">Distribution: A×2 &nbsp;|&nbsp; B×2 &nbsp;|&nbsp; C×2 &nbsp;|&nbsp; D×2</div>
+    </div>
+
+    <div class="rationale-title">Examiner Rationale</div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">1</span>
+        <span class="rationale-answer">A — burst</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "burst onto the scene" — unambiguous fixed expression conveying sudden, dramatic arrival
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>emerged</em> — dramatic register but not a fixed phrase; "emerged onto the scene" is unnatural
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>came</em> — too vague and informal; "came onto the scene" lacks idiomatic force
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>arrived</em> — too literal; implies physical location, not sudden prominence
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">2</span>
+        <span class="rationale-answer">C — driven</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "driven leadership" — precise collocation implying intense internal motivation and ambition
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>forceful</em> — tempting, implies strong leadership, but suggests aggression rather than motivation
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>stubborn</em> — related to determination but carries clearly negative connotation
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>lively</em> — too trivial and informal; entirely wrong register for leadership description
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">3</span>
+        <span class="rationale-answer">D — clinching</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "clinch a title" — precise sporting collocation for winning a closely contested competition
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>grabbing</em> — common informal sporting language but too colloquial for C1 written register
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>achieving</em> — related but "achieving a title" is not a natural sporting collocation
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>obtaining</em> — formal register but entirely wrong for a sporting context; eliminable quickly
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">4</span>
+        <span class="rationale-answer">A — jubilation</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "jubilation" — denotes mass public outpouring of joy, precisely right for a historic 81-year wait
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>elation</em> — high-register synonym but describes personal emotion, not collective public reaction
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>celebration</em> — too general; does not convey the intensity or historic significance
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>excitement</em> — far too mild for scenes marking an 81-year wait; register mismatch
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">5</span>
+        <span class="rationale-answer">B — followed suit</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "followed suit" — fixed expression meaning to do the same as another party; unambiguous
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>caught on</em> — tempting phrasal verb but means "became popular", entirely different meaning
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>kept pace</em> — means maintained the same speed; wrong meaning in context
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>fell in line</em> — means complied with authority; clearly wrong in a sporting achievement context
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">6</span>
+        <span class="rationale-answer">C — overhauled</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "overhaul" — implies radical, comprehensive reform of an entire system; stronger than alternatives
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>restructured</em> — implies organisational change rather than rule or format reform
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>reformed</em> — suggests only partial or moral change; lacks the scale of "overhaul"
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>revised</em> — too minor in scale; associated with text editing rather than systemic change
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">7</span>
+        <span class="rationale-answer">D — soared</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "soared" — conveys dramatic, rapid increase; precisely right for attendances in a golden era
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>climbed</em> — upward movement but implies gradual effort rather than dramatic surge
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>rose</em> — too gradual and neutral; no sense of scale or speed
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>increased</em> — completely neutral; conveys no emotional or dramatic weight whatsoever
+        </div>
+      </div>
+    </div>
+
+    <div class="rationale-card">
+      <div class="rationale-header">
+        <span class="rationale-gap">8</span>
+        <span class="rationale-answer">B — signalled</span>
+      </div>
+      <div class="rationale-body">
+        <div class="distractor-tag tag-correct full-correct">
+          <div class="tag-label">✅ Correct</div>
+          "signalled a new era" — precise formal collocation marking the beginning of a significant period
+        </div>
+        <div class="distractor-tag tag-strong">
+          <div class="tag-label">Strong distractor</div>
+          <em>sparked off</em> — too informal and implies conflict or controversy rather than organic change
+        </div>
+        <div class="distractor-tag tag-weak">
+          <div class="tag-label">Weak distractor</div>
+          <em>launched</em> — implies deliberate, organised start rather than an organic historical shift
+        </div>
+        <div class="distractor-tag tag-obvious">
+          <div class="tag-label">Obvious distractor</div>
+          <em>ushered in</em> — overly ceremonial in register; slightly archaic and stilted in this context
+        </div>
+      </div>
+    </div>
+
+    <div class="ped-note">
+      <strong>Note on item design:</strong> Each set of four options follows the Cambridge distractor hierarchy — one correct answer, one <strong>strong distractor</strong> (genuinely tempting, wrong for a precise collocational or grammatical reason), one <strong>weak distractor</strong> (related but clearly wrong on reflection), and one <strong>obvious distractor</strong> (eliminable quickly, though thematically connected). This mirrors authentic CAE item design and allows candidates to work efficiently through elimination rather than having to agonise over every option.
+    </div>
+
+  </div><!-- /teacher section -->
+
+</main>
+
+<script>
+  function select(el) {
+    const question = el.closest('.question');
+    question.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleTeacher(checkbox) {
+    const teacherSection = document.getElementById('teacherSection');
+    if (checkbox.checked) {
+      teacherSection.classList.add('visible');
+      // Reveal correct answers on questions
+      document.querySelectorAll('.question').forEach(q => {
+        const correct = q.dataset.correct;
+        q.querySelectorAll('.option').forEach(opt => {
+          if (opt.dataset.opt === correct) {
+            opt.classList.add('correct-answer');
+          }
+        });
+      });
+    } else {
+      teacherSection.classList.remove('visible');
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('correct-answer', 'wrong-answer');
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
