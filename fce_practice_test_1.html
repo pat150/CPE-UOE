@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FCE · B2 Practice · Part 1 – New York City</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:2px;font-size:0.95rem;text-transform:uppercase;}
+  .header-btn{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .header-btn:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:36px;max-width:860px;margin:40px auto;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.7rem;margin-bottom:6px;}
+  .subtitle{color:#aaa;font-size:0.9rem;margin-bottom:28px;line-height:1.6;}
+  .home-link{display:inline-block;margin-bottom:20px;color:#c9a84c;font-size:0.85rem;text-decoration:none;letter-spacing:1px;}
+  .home-link:hover{text-decoration:underline;}
+  input[type="text"],input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;outline:none;}
+  input::placeholder{color:#888;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .progress-wrap{margin-bottom:24px;}
+  .progress-top{display:flex;justify-content:space-between;color:#aaa;font-size:0.82rem;margin-bottom:6px;}
+  .progress-bar-bg{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;}
+  .progress-bar{background:#c9a84c;height:4px;border-radius:4px;transition:width 0.3s;width:0%;}
+  .passage-box{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:24px 28px;margin-bottom:28px;line-height:2.2;font-size:0.95rem;color:#ddd;}
+  .passage-box h2{font-family:'Playfair Display',serif;color:#c9a84c;text-align:center;margin-bottom:18px;font-size:1.25rem;letter-spacing:2px;}
+  .gn{color:#c9a84c;font-weight:bold;font-size:0.85rem;}
+  .example-note{color:#888;font-size:0.8rem;font-style:italic;margin-bottom:12px;}
+  .q-block{margin-bottom:14px;padding:14px 18px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.07);}
+  .q-num{color:#c9a84c;font-weight:bold;font-size:0.85rem;margin-bottom:10px;}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .opt-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);color:#ccc;padding:9px 14px;border-radius:5px;cursor:pointer;font-family:inherit;font-size:0.88rem;text-align:left;transition:all 0.18s;}
+  .opt-btn:hover{border-color:#c9a84c;color:#e8e0d5;background:rgba(201,168,76,0.08);}
+  .opt-btn.selected{border-color:#c9a84c;background:rgba(201,168,76,0.18);color:#c9a84c;font-weight:bold;}
+  .score-box{text-align:center;padding:20px 0 30px;}
+  .big-score{font-family:'Playfair Display',serif;font-size:4rem;color:#c9a84c;}
+  .result-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .pill{text-align:center;}
+  .pill-label{font-size:0.66rem;color:#777;margin-bottom:3px;}
+  .pill-val{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;border-radius:16px;font-weight:bold;font-size:0.82rem;padding:0 6px;}
+  .pill-val.ok{background:rgba(111,207,151,0.2);border:2px solid #6fcf97;color:#6fcf97;}
+  .pill-val.bad{background:rgba(235,87,87,0.2);border:2px solid #eb5757;color:#eb5757;}
+  .pill-val.neutral{background:rgba(201,168,76,0.15);border:2px solid #c9a84c;color:#c9a84c;}
+  .section-title{color:#c9a84c;font-weight:bold;letter-spacing:1px;margin-bottom:14px;font-size:0.85rem;text-transform:uppercase;}
+  .sub-card{margin-bottom:16px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(255,255,255,0.08);}
+  .sub-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+  .sub-name{font-size:1rem;font-weight:bold;}
+  .sub-meta{color:#777;font-size:0.78rem;margin-top:2px;}
+  .sub-score{color:#c9a84c;font-weight:bold;font-size:1.1rem;}
+  .btn-sm{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:4px 12px;cursor:pointer;border-radius:3px;font-size:0.76rem;font-family:inherit;}
+  .btn-sm.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-sm.danger:hover{background:rgba(235,87,87,0.1);}
+  .no-subs{color:#666;font-style:italic;text-align:center;padding:30px;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  .key-editor{margin-bottom:28px;padding:20px;background:rgba(201,168,76,0.05);border-radius:6px;border:1px solid rgba(201,168,76,0.25);}
+  .key-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.83rem;display:flex;gap:10px;align-items:center;}
+  .key-label{color:#c9a84c;font-weight:bold;min-width:50px;flex-shrink:0;}
+  .key-select{background:#1a2a35;color:#e8e0d5;border:1px solid rgba(201,168,76,0.4);border-radius:3px;padding:4px 8px;font-family:inherit;font-size:0.83rem;}
+  @media(max-width:600px){.card{padding:20px 16px;margin:20px 12px;}.options{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">B2 Practice · Part 1 · New York City</span>
+  <div id="header-right"><button class="header-btn" onclick="goTo('login')">Teacher Login</button></div>
+</header>
+
+<div id="page-home" class="page active">
+  <div class="card">
+    <a class="home-link" href="index.html">&#8592; Back to Home</a>
+    <h1>B2 · FCE Practice</h1>
+    <p class="subtitle">Reading &amp; Use of English · Part 1 · Multiple Choice Cloze<br><strong style="color:#c9a84c;">New York City</strong><br>Read the text and choose the best word (A, B, C or D) for each gap. 8 questions.</p>
+    <input type="text" id="student-name" placeholder="Enter your full name..."/>
+    <button class="btn-primary" onclick="startQuiz()">Start &#8594;</button>
+  </div>
+</div>
+
+<div id="page-quiz" class="page">
+  <div class="card">
+    <h1>New York City</h1>
+    <div class="example-note">Example: 0 · B · grown</div>
+    <div class="progress-wrap">
+      <div class="progress-top"><span id="prog-text">0 of 8 answered</span><span id="prog-pct">0%</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar" id="prog-bar"></div></div>
+    </div>
+    <div class="passage-box">
+      <h2>NEW YORK CITY</h2>
+      <p>New York City has <span class="gn">(0) <strong>B</strong></span> into the second largest city in North America. It has long been a major business, cultural and shopping centre, <span class="gn">(1)</span> millions of visitors each year. Most tourists stay in the <span class="gn">(2)</span> of the city, Manhattan, where you can see the sights on foot or take a tour bus. In <span class="gn">(3)</span>, the main residential areas are on the <span class="gn">(4)</span> of the city where, as in all large cities, some districts are quite in <span class="gn">(5)</span> of repair.
+
+During your visit you may want to take a boat trip to Ellis Island, where you can stop for a <span class="gn">(6)</span> to read about the history of immigration. Many tourists also visit Queens, which has some interesting art galleries, and Brooklyn for cafés, shops and <span class="gn">(7)</span> nightlife. Finally, you will certainly want to visit Central Park, a huge open <span class="gn">(8)</span> which is ideal for relaxing on a hot summer day.</p>
+    </div>
+    <div id="questions-container"></div>
+    <button class="btn-primary" onclick="submitQuiz()" style="margin-top:8px;">Submit Answers &#8594;</button>
+  </div>
+</div>
+
+<div id="page-submitted" class="page">
+  <div class="card">
+    <div class="score-box">
+      <div id="done-name" style="color:#aaa;margin-bottom:8px;"></div>
+      <div class="big-score" id="done-score">&#10003;</div>
+      <div style="color:#aaa;margin-top:8px;margin-bottom:6px;" id="done-msg"></div>
+    </div>
+    <div id="done-breakdown"></div>
+    <button class="btn-primary" style="margin-top:20px;" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Login</h1><p>Enter your password</p>
+      <input type="password" id="admin-pass" placeholder="Password" style="text-align:center;letter-spacing:4px;" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="adminLogin()">Login &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<div id="page-admin" class="page">
+  <div class="card">
+    <div class="section-title">Answer Key</div>
+    <div class="key-editor" id="key-editor"></div>
+    <div class="section-title" id="sub-count-label">Student Submissions</div>
+    <div id="submissions-container"><p class="no-subs">No submissions yet.</p></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='b2_p1_nyc_subs';
+const QUESTIONS=[{n:1,opts:[{l:"A",w:"appealing"},{l:"B",w:"advancing"},{l:"C",w:"arriving"},{l:"D",w:"attracting"}]},
+  {n:2,opts:[{l:"A",w:"heart"},{l:"B",w:"interior"},{l:"C",w:"focus"},{l:"D",w:"root"}]},
+  {n:3,opts:[{l:"A",w:"response"},{l:"B",w:"practice"},{l:"C",w:"contrast"},{l:"D",w:"reality"}]},
+  {n:4,opts:[{l:"A",w:"suburbs"},{l:"B",w:"surroundings"},{l:"C",w:"borders"},{l:"D",w:"outskirts"}]},
+  {n:5,opts:[{l:"A",w:"demand"},{l:"B",w:"wish"},{l:"C",w:"need"},{l:"D",w:"requirement"}]},
+  {n:6,opts:[{l:"A",w:"period"},{l:"B",w:"while"},{l:"C",w:"duration"},{l:"D",w:"piece"}]},
+  {n:7,opts:[{l:"A",w:"vivid"},{l:"B",w:"cheerful"},{l:"C",w:"bright"},{l:"D",w:"lively"}]},
+  {n:8,opts:[{l:"A",w:"extension"},{l:"B",w:"region"},{l:"C",w:"space"},{l:"D",w:"estate"}]}];
+let currentStudent='',answers={},submitted=false;
+let submissions=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let answerKey={1:"A",2:"C",3:"A",4:"D",5:"D",6:"B",7:"D",8:"C"};
+const savedKey=JSON.parse(localStorage.getItem(STORAGE_KEY+'_key')||'null');
+if(savedKey)Object.assign(answerKey,savedKey);
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(submissions));}
+function saveKey(){localStorage.setItem(STORAGE_KEY+'_key',JSON.stringify(answerKey));}
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const hr=document.getElementById('header-right');
+  if(page==='admin') hr.innerHTML='<button class="header-btn" onclick="goTo(\'home\')">Logout</button>';
+  else if(page==='login') hr.innerHTML='<button class="header-btn" onclick="goTo(\'home\')">&#8592; Back</button>';
+  else hr.innerHTML='<button class="header-btn" onclick="goTo(\'login\')">Teacher Login</button>';
+}
+function goHome(){currentStudent='';answers={};submitted=false;document.getElementById('student-name').value='';goTo('home');}
+function startQuiz(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  currentStudent=name;answers={};submitted=false;renderQuestions();goTo('quiz');
+}
+function renderQuestions(){
+  const c=document.getElementById('questions-container');c.innerHTML='';
+  QUESTIONS.forEach(q=>{
+    const opts=q.opts.map(o=>`<button class="opt-btn" id="opt-${q.n}-${o.l}" onclick="selectAnswer(${q.n},'${o.l}')">${o.l} &nbsp; ${o.w}</button>`).join('');
+    c.innerHTML+=`<div class="q-block"><div class="q-num">Question ${q.n}</div><div class="options">${opts}</div></div>`;
+  });
+}
+function selectAnswer(qn,letter){
+  if(submitted)return;
+  answers[qn]=letter;
+  QUESTIONS.find(q=>q.n===qn).opts.forEach(o=>{
+    const btn=document.getElementById('opt-'+qn+'-'+o.l);
+    if(btn)btn.classList.toggle('selected',o.l===letter);
+  });
+  const filled=Object.keys(answers).length;
+  const pct=Math.round(filled/QUESTIONS.length*100);
+  document.getElementById('prog-text').textContent=filled+' of '+QUESTIONS.length+' answered';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-bar').style.width=pct+'%';
+}
+function submitQuiz(){
+  const missing=QUESTIONS.filter(q=>!answers[q.n]).length;
+  if(missing&&!confirm(missing+' unanswered. Submit anyway?'))return;
+  submitted=true;
+  const hasKey=Object.keys(answerKey).length>0;
+  let score=0;
+  if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&answers[q.n]===answerKey[q.n])score++;});
+  const sub={id:Date.now(),name:currentStudent,answers:{...answers},score:hasKey?score:'—',total:QUESTIONS.length,submittedAt:new Date().toLocaleString()};
+  submissions.push(sub);saveData();
+  document.getElementById('done-name').textContent=currentStudent;
+  if(hasKey){
+    document.getElementById('done-score').textContent=score+'/'+QUESTIONS.length;
+    const pct=Math.round(score/QUESTIONS.length*100);
+    document.getElementById('done-msg').textContent=pct>=75?'Excellent!':pct>=50?'Good effort!':'Keep practising!';
+    let html='<div class="result-grid">';
+    QUESTIONS.forEach(q=>{const s=answers[q.n]||'?';const k=answerKey[q.n];const cls=k?(s===k?'ok':'bad'):'neutral';html+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;});
+    html+='</div>';
+    document.getElementById('done-breakdown').innerHTML=html;
+  }else{
+    document.getElementById('done-score').textContent='&#10003;';
+    document.getElementById('done-msg').textContent='Submitted! Your teacher will review your answers.';
+    document.getElementById('done-breakdown').innerHTML='';
+  }
+  goTo('submitted');
+}
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    renderAdmin();goTo('admin');
+  }else document.getElementById('login-error').style.display='block';
+}
+function renderAdmin(){
+  let khtml='';
+  QUESTIONS.forEach(q=>{
+    const cur=answerKey[q.n]||'';
+    const opts=q.opts.map(o=>`<option value="${o.l}" ${cur===o.l?'selected':''}>${o.l} — ${o.w}</option>`).join('');
+    khtml+=`<div class="key-row"><span class="key-label">Q${q.n}:</span><select class="key-select" id="key-${q.n}"><option value="">— not set —</option>${opts}</select></div>`;
+  });
+  document.getElementById('key-editor').innerHTML=khtml+`<button class="btn-sm" style="margin-top:10px;" onclick="saveKeyFromEditor()">Save Key</button>`;
+  renderSubmissions();
+}
+function saveKeyFromEditor(){
+  QUESTIONS.forEach(q=>{const el=document.getElementById('key-'+q.n);if(el&&el.value)answerKey[q.n]=el.value;else delete answerKey[q.n];});
+  saveKey();renderSubmissions();alert('Key saved!');
+}
+function renderSubmissions(){
+  const cnt=document.getElementById('submissions-container');
+  document.getElementById('sub-count-label').textContent='STUDENT SUBMISSIONS ('+submissions.length+')';
+  if(!submissions.length){cnt.innerHTML='<p class="no-subs">No submissions yet.</p>';return;}
+  const hasKey=Object.keys(answerKey).length>0;
+  let html='';
+  submissions.sort((a,b)=>b.id-a.id).forEach(sub=>{
+    let score=0;
+    if(hasKey) QUESTIONS.forEach(q=>{if(answerKey[q.n]&&sub.answers[q.n]===answerKey[q.n])score++;});
+    const scoreDisplay=hasKey?score+'/'+sub.total:'Pending key';
+    let pills='<div class="result-grid">';
+    QUESTIONS.forEach(q=>{const s=sub.answers[q.n]||'?';const k=answerKey[q.n];const cls=k?(s===k?'ok':'bad'):'neutral';pills+=`<div class="pill"><div class="pill-label">Q${q.n}</div><div class="pill-val ${cls}">${s}</div></div>`;});
+    pills+='</div>';
+    html+=`<div class="sub-card"><div class="sub-header"><div><div class="sub-name">${sub.name}</div><div class="sub-meta">${sub.submittedAt}</div></div><div style="display:flex;align-items:center;gap:10px;"><span class="sub-score">${scoreDisplay}</span><button class="btn-sm danger" onclick="deleteSub(${sub.id})">Delete</button></div></div>${pills}</div>`;
+  });
+  cnt.innerHTML=html;
+}
+function deleteSub(id){if(!confirm('Delete?'))return;submissions=submissions.filter(s=>s.id!==id);saveData();renderSubmissions();}
+</script>
+</body>
+</html>
