@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Teacher Dashboard · Cambridge Exam Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .header-right{display:flex;gap:10px;align-items:center;}
+  .btn-hdr{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 18px;cursor:pointer;border-radius:3px;font-size:0.8rem;letter-spacing:1px;font-family:inherit;}
+  .btn-hdr:hover{background:rgba(201,168,76,0.15);}
+  .page{display:none;}.page.active{display:block;}
+  /* Login */
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;}
+  .login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:40px;max-width:380px;width:100%;text-align:center;}
+  .login-card h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.5rem;margin-bottom:8px;}
+  .login-card p{color:#888;font-size:0.88rem;margin-bottom:24px;}
+  input[type="password"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.5);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;text-align:center;letter-spacing:4px;}
+  .btn-primary{background:#c9a84c;color:#0f2027;border:none;padding:12px 32px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;}
+  .btn-primary:hover{background:#d9bb6a;}
+  .error-msg{color:#eb5757;margin-bottom:12px;font-size:0.9rem;}
+  /* Dashboard */
+  .dash{max-width:1100px;margin:0 auto;padding:30px 32px 60px;}
+  .dash-title{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.6rem;margin-bottom:4px;}
+  .dash-sub{color:#888;font-size:0.85rem;margin-bottom:28px;}
+  /* Stats row */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:32px;}
+  .stat-box{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:18px 20px;text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:#c9a84c;}
+  .stat-label{color:#777;font-size:0.75rem;letter-spacing:1px;margin-top:4px;text-transform:uppercase;}
+  /* Filters */
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;align-items:center;}
+  .filter-label{color:#888;font-size:0.78rem;letter-spacing:1px;margin-right:4px;}
+  .filter-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#aaa;padding:5px 14px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+  .filter-btn:hover,.filter-btn.active{border-color:#c9a84c;color:#c9a84c;background:rgba(201,168,76,0.08);}
+  select.filter-select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#aaa;padding:5px 12px;border-radius:3px;font-size:0.78rem;font-family:inherit;cursor:pointer;}
+  select.filter-select:focus{outline:none;border-color:#c9a84c;}
+  /* Table */
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+  th{color:#c9a84c;font-weight:bold;letter-spacing:1px;font-size:0.72rem;text-transform:uppercase;padding:10px 14px;border-bottom:2px solid rgba(201,168,76,0.3);text-align:left;white-space:nowrap;}
+  td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);color:#ccc;vertical-align:top;}
+  tr:hover td{background:rgba(255,255,255,0.03);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:0.72rem;font-weight:bold;letter-spacing:1px;}
+  .badge-cae{background:rgba(211,84,0,0.2);border:1px solid rgba(211,84,0,0.5);color:#d35400;}
+  .badge-cpe{background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.5);color:#e74c3c;}
+  .badge-fce{background:rgba(26,122,74,0.2);border:1px solid rgba(26,122,74,0.5);color:#2ecc71;}
+  .badge-pet{background:rgba(26,95,168,0.2);border:1px solid rgba(26,95,168,0.5);color:#3498db;}
+  .badge-prac{background:rgba(108,52,131,0.2);border:1px solid rgba(108,52,131,0.5);color:#9b59b6;}
+  .badge-gen{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#aaa;}
+  .score-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.8rem;font-weight:bold;}
+  .score-hi{background:rgba(111,207,151,0.15);color:#6fcf97;}
+  .score-mid{background:rgba(201,168,76,0.15);color:#c9a84c;}
+  .score-lo{background:rgba(235,87,87,0.15);color:#eb5757;}
+  .score-none{color:#555;font-style:italic;}
+  .no-data{text-align:center;padding:60px 20px;color:#555;font-style:italic;}
+  .del-btn{background:transparent;border:1px solid rgba(235,87,87,0.4);color:#eb5757;padding:3px 10px;cursor:pointer;border-radius:3px;font-size:0.72rem;font-family:inherit;}
+  .del-btn:hover{background:rgba(235,87,87,0.1);}
+  /* Export */
+  .toolbar{display:flex;justify-content:flex-end;margin-bottom:16px;}
+  .btn-sm-gold{background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:6px 16px;cursor:pointer;border-radius:3px;font-size:0.78rem;letter-spacing:1px;font-family:inherit;}
+  .btn-sm-gold:hover{background:rgba(201,168,76,0.1);}
+  @media(max-width:700px){.dash{padding:20px 16px 40px;}th,td{padding:8px 10px;}.filter-row{gap:6px;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Teacher Dashboard</span>
+  <div class="header-right">
+    <a href="index.html" style="color:#888;font-size:0.8rem;text-decoration:none;letter-spacing:1px;">← Activities</a>
+    <button class="btn-hdr" id="logout-btn" style="display:none;" onclick="doLogout()">Logout</button>
+  </div>
+</header>
+
+<!-- LOGIN PAGE -->
+<div id="page-login" class="page active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>Teacher Dashboard</h1>
+      <p>Enter the teacher password to view all student submissions</p>
+      <input type="password" id="admin-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <div class="error-msg" id="login-error" style="display:none;">Incorrect password</div>
+      <button class="btn-primary" onclick="doLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div id="page-dash" class="page">
+  <div class="dash">
+    <div class="dash-title">All Submissions</div>
+    <div class="dash-sub" id="dash-sub">Loading submissions…</div>
+
+    <div class="stats-row" id="stats-row"></div>
+
+    <div class="filter-row">
+      <span class="filter-label">CLASS:</span>
+      <div id="class-filters"></div>
+      <span class="filter-label" style="margin-left:12px;">EXAM:</span>
+      <div id="exam-filters"></div>
+      <select class="filter-select" id="sort-select" onchange="renderTable()">
+        <option value="date-desc">Newest first</option>
+        <option value="date-asc">Oldest first</option>
+        <option value="name-asc">Name A–Z</option>
+        <option value="class-asc">Class A–Z</option>
+      </select>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn-sm-gold" onclick="exportCSV()">Export CSV ↓</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="sub-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Class</th>
+            <th>Activity</th>
+            <th>Level</th>
+            <th>Score</th>
+            <th>Submitted</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div class="no-data" id="no-data" style="display:none;">No submissions found.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── All known storage keys and their metadata ──────────────────────────
+// Format: [storageKey, displayName, level]
+// Add new files here as you create them.
+const KNOWN_EXAMS = [
+  // CPE Full 1
+  ['cpe_full_1_p1_subs','CPE Full 1 · Part 1','cpe'],
+  ['cpe_full_1_p2_subs','CPE Full 1 · Part 2','cpe'],
+  ['cpe_full_1_p3_subs','CPE Full 1 · Part 3','cpe'],
+  ['cpe_full_1_p4_subs','CPE Full 1 · Part 4','cpe'],
+  ['cpe_part5_subs',    'CPE Part 5','cpe'],
+  ['cpe_part6_subs',    'CPE Part 6','cpe'],
+  ['cpe_part7_subs',    'CPE Part 7','cpe'],
+  // CAE Full 1
+  ['cae_full_1_p1_subs','CAE Full 1 · Part 1','cae'],
+  ['cae_full_1_p2_subs','CAE Full 1 · Part 2','cae'],
+  ['cae_full_1_p3_subs','CAE Full 1 · Part 3','cae'],
+  ['cae_full_1_p4_subs','CAE Full 1 · Part 4','cae'],
+  // CAE Full 2
+  ['cae2_p1_subs',      'CAE Full 2 · Part 1','cae'],
+  ['cae2_p2_subs',      'CAE Full 2 · Part 2','cae'],
+  ['cae2_p3_subs',      'CAE Full 2 · Part 3','cae'],
+  // Practice tests
+  ['pt14_subs',         'Practice Test 14','practice'],
+  ['pt15_subs',         'Practice Test 15','practice'],
+  ['pt16_subs',         'Practice Test 16','practice'],
+  ['pkw1_subs',         'Keyword Practice 1','practice'],
+  // KWT series
+  ['cae_kwt1_subs',     'CAE KWT 1 (Q1–10)','cae'],
+  ['cae_kwt2_subs',     'CAE KWT 2 (Q11–20)','cae'],
+  ['cae_kwt3_subs',     'CAE KWT 3 (Q21–30)','cae'],
+  ['cae_kwt4_subs',     'CAE KWT 4 (Q31–40)','cae'],
+  ['cae_kwt5_subs',     'CAE KWT 5 (Q41–50)','cae'],
+  ['cae_kwt6_subs',     'CAE KWT 6 (Q51–60)','cae'],
+  ['cae_kwt7_subs',     'CAE KWT 7 (Q61–70)','cae'],
+];
+
+const LEVEL_BADGE = {
+  cpe:'badge-cpe', cae:'badge-cae', fce:'badge-fce',
+  pet:'badge-pet', practice:'badge-prac'
+};
+const LEVEL_LABEL = {cpe:'C2·CPE',cae:'C1·CAE',fce:'B2·FCE',pet:'B1·PET',practice:'Practice'};
+
+let allRows = [];
+let filterClass = 'all';
+let filterExam  = 'all';
+
+function doLogin(){
+  if(document.getElementById('admin-pass').value==='1996'){
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('admin-pass').value='';
+    document.getElementById('logout-btn').style.display='inline-block';
+    showDash();
+  } else {
+    document.getElementById('login-error').style.display='block';
+  }
+}
+function doLogout(){
+  document.getElementById('logout-btn').style.display='none';
+  document.getElementById('page-dash').classList.remove('active');
+  document.getElementById('page-login').classList.add('active');
+  document.getElementById('page-dash').classList.remove('active');
+  document.getElementById('page-login').style.display='';
+  goTo('login');
+}
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+}
+
+function showDash(){
+  goTo('dash');
+  loadAll();
+}
+
+function loadAll(){
+  allRows=[];
+  KNOWN_EXAMS.forEach(([key,name,level])=>{
+    let subs=[];
+    try{subs=JSON.parse(localStorage.getItem(key)||'[]');}catch{}
+    subs.forEach(s=>{
+      allRows.push({
+        id: key+'::'+s.id,
+        storageKey: key,
+        subId: s.id,
+        name: s.name||'—',
+        cls: s.cls||s.class||'—',
+        activity: name,
+        level,
+        score: s.score,
+        total: s.total,
+        submittedAt: s.submittedAt||'',
+        raw: s
+      });
+    });
+  });
+
+  updateStats();
+  buildFilters();
+  renderTable();
+  document.getElementById('dash-sub').textContent=
+    allRows.length+' submission'+(allRows.length!==1?'s':'')+' across '+KNOWN_EXAMS.length+' activities';
+}
+
+function updateStats(){
+  const classes=new Set(allRows.map(r=>r.cls).filter(c=>c&&c!=='—'));
+  const students=new Set(allRows.map(r=>r.name));
+  const scored=allRows.filter(r=>typeof r.score==='number');
+  const avgScore=scored.length?Math.round(scored.reduce((a,r)=>a+(r.score/r.total*100),0)/scored.length):null;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-box"><div class="stat-num">${allRows.length}</div><div class="stat-label">Submissions</div></div>
+    <div class="stat-box"><div class="stat-num">${students.size}</div><div class="stat-label">Students</div></div>
+    <div class="stat-box"><div class="stat-num">${classes.size}</div><div class="stat-label">Classes</div></div>
+    <div class="stat-box"><div class="stat-num">${avgScore!==null?avgScore+'%':'—'}</div><div class="stat-label">Avg Score</div></div>
+  `;
+}
+
+function buildFilters(){
+  const classes=['all',...new Set(allRows.map(r=>r.cls).filter(c=>c&&c!=='—'))].sort();
+  const exams=['all',...new Set(allRows.map(r=>r.level))].sort();
+
+  document.getElementById('class-filters').innerHTML=
+    classes.map(c=>`<button class="filter-btn ${c==='all'&&filterClass==='all'?'active':c===filterClass?'active':''}" onclick="setClassFilter('${c}',this)">${c==='all'?'All':c}</button>`).join('');
+  document.getElementById('exam-filters').innerHTML=
+    exams.map(e=>`<button class="filter-btn ${e==='all'&&filterExam==='all'?'active':e===filterExam?'active':''}" onclick="setExamFilter('${e}',this)">${e==='all'?'All':(LEVEL_LABEL[e]||e)}</button>`).join('');
+}
+
+function setClassFilter(c,btn){
+  filterClass=c;
+  document.querySelectorAll('#class-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+function setExamFilter(e,btn){
+  filterExam=e;
+  document.querySelectorAll('#exam-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable(){
+  let rows=[...allRows];
+  if(filterClass!=='all') rows=rows.filter(r=>r.cls===filterClass);
+  if(filterExam!=='all')  rows=rows.filter(r=>r.level===filterExam);
+
+  const sort=document.getElementById('sort-select').value;
+  if(sort==='date-desc') rows.sort((a,b)=>b.subId-a.subId);
+  else if(sort==='date-asc') rows.sort((a,b)=>a.subId-b.subId);
+  else if(sort==='name-asc') rows.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='class-asc') rows.sort((a,b)=>a.cls.localeCompare(b.cls));
+
+  const tbody=document.getElementById('table-body');
+  const noData=document.getElementById('no-data');
+  if(!rows.length){tbody.innerHTML='';noData.style.display='block';return;}
+  noData.style.display='none';
+
+  tbody.innerHTML=rows.map(r=>{
+    const badgeCls=LEVEL_BADGE[r.level]||'badge-gen';
+    const levelLbl=LEVEL_LABEL[r.level]||r.level;
+    let scorePill='<span class="score-none">Pending</span>';
+    if(typeof r.score==='number'){
+      const pct=r.total?Math.round(r.score/r.total*100):0;
+      const cls=pct>=70?'score-hi':pct>=50?'score-mid':'score-lo';
+      scorePill=`<span class="score-pill ${cls}">${r.score}/${r.total} <span style="opacity:0.7;font-size:0.72rem;">(${pct}%)</span></span>`;
+    }
+    const clsDisplay=r.cls&&r.cls!=='—'?r.cls:'<span style="color:#444;">—</span>';
+    return `<tr>
+      <td style="font-weight:bold;color:#e8e0d5;">${esc(r.name)}</td>
+      <td>${clsDisplay}</td>
+      <td>${esc(r.activity)}</td>
+      <td><span class="badge ${badgeCls}">${levelLbl}</span></td>
+      <td>${scorePill}</td>
+      <td style="color:#666;font-size:0.8rem;white-space:nowrap;">${r.submittedAt||'—'}</td>
+      <td><button class="del-btn" onclick="deleteSub('${r.storageKey}',${r.subId})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function deleteSub(key,id){
+  if(!confirm('Delete this submission?'))return;
+  let subs=[];
+  try{subs=JSON.parse(localStorage.getItem(key)||'[]');}catch{}
+  subs=subs.filter(s=>s.id!==id);
+  localStorage.setItem(key,JSON.stringify(subs));
+  loadAll();
+}
+
+function exportCSV(){
+  let rows=[...allRows];
+  if(filterClass!=='all') rows=rows.filter(r=>r.cls===filterClass);
+  if(filterExam!=='all')  rows=rows.filter(r=>r.level===filterExam);
+
+  const header=['Name','Class','Activity','Level','Score','Out Of','Percent','Submitted'];
+  const lines=[header.join(',')];
+  rows.forEach(r=>{
+    const pct=typeof r.score==='number'&&r.total?Math.round(r.score/r.total*100):'';
+    lines.push([
+      csv(r.name), csv(r.cls), csv(r.activity), r.level,
+      r.score!=='—'?r.score:'', r.total||'', pct,
+      csv(r.submittedAt)
+    ].join(','));
+  });
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='submissions_'+(new Date().toISOString().slice(0,10))+'.csv';
+  a.click();
+}
+function csv(v){return '"'+String(v||'').replace(/"/g,'""')+'"';}
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cambridge Exam Practice · Sign In</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:wght@300;400;600&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Source Serif 4',serif;color:#e8e0d5;display:flex;flex-direction:column;}
+  header{background:rgba(0,0,0,0.4);border-bottom:2px solid #c9a84c;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(12px);}
+  .logo{font-family:'Playfair Display',serif;color:#c9a84c;letter-spacing:3px;font-size:1rem;text-transform:uppercase;}
+  .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+  .card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:44px 40px;max-width:420px;width:100%;backdrop-filter:blur(8px);}
+  h1{font-family:'Playfair Display',serif;color:#c9a84c;font-size:1.8rem;text-align:center;margin-bottom:6px;}
+  .tagline{color:#888;font-size:0.85rem;text-align:center;margin-bottom:32px;letter-spacing:1px;}
+  label{display:block;color:#aaa;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  input[type="text"]{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(201,168,76,0.4);border-radius:4px;color:#e8e0d5;font-size:1rem;font-family:inherit;margin-bottom:20px;outline:none;transition:border-color 0.2s;}
+  input[type="text"]:focus{border-color:#c9a84c;background:rgba(255,255,255,0.12);}
+  input::placeholder{color:#555;}
+  .btn{width:100%;background:#c9a84c;color:#0f2027;border:none;padding:14px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:1px;font-family:inherit;margin-top:4px;transition:background 0.2s;}
+  .btn:hover{background:#d9bb6a;}
+  .error{color:#eb5757;font-size:0.85rem;margin-bottom:14px;display:none;text-align:center;}
+  .divider{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:28px 0;}
+  .logged-in-box{text-align:center;}
+  .logged-in-box .name{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;margin-bottom:4px;}
+  .logged-in-box .class{color:#888;font-size:0.85rem;margin-bottom:24px;}
+  .btn-outline{width:100%;background:transparent;border:1px solid #c9a84c;color:#c9a84c;padding:12px;font-size:0.9rem;border-radius:4px;cursor:pointer;font-family:inherit;letter-spacing:1px;margin-bottom:10px;transition:all 0.2s;}
+  .btn-outline:hover{background:rgba(201,168,76,0.1);}
+  .btn-outline.danger{border-color:#eb5757;color:#eb5757;}
+  .btn-outline.danger:hover{background:rgba(235,87,87,0.08);}
+  .hint{color:#555;font-size:0.78rem;text-align:center;margin-top:16px;line-height:1.6;}
+  @media(max-width:500px){.card{padding:32px 24px;}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Cambridge Exam Practice</span>
+  <a href="index.html" style="color:#c9a84c;font-size:0.82rem;letter-spacing:1px;text-decoration:none;">← Activities</a>
+</header>
+<div class="wrap">
+  <div class="card">
+
+    <!-- NOT LOGGED IN -->
+    <div id="login-form">
+      <h1>Sign In</h1>
+      <p class="tagline">Enter your name and class code to continue</p>
+      <div class="error" id="err">Please fill in both fields.</div>
+      <label for="inp-name">Your Name</label>
+      <input type="text" id="inp-name" placeholder="e.g. Maria García" autocomplete="given-name" onkeydown="if(event.key==='Enter')document.getElementById('inp-class').focus()"/>
+      <label for="inp-class">Class Code</label>
+      <input type="text" id="inp-class" placeholder="e.g. CAE2024" autocomplete="off" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="btn" onclick="doLogin()">Sign In →</button>
+      <p class="hint">Your teacher will give you the class code.<br>Your progress is saved on this device.</p>
+    </div>
+
+    <!-- ALREADY LOGGED IN -->
+    <div id="logged-in" style="display:none;">
+      <div class="logged-in-box">
+        <div style="font-size:2.5rem;margin-bottom:12px;">👋</div>
+        <div class="name" id="li-name"></div>
+        <div class="class" id="li-class"></div>
+        <a href="index.html"><button class="btn" style="margin-bottom:12px;">Go to Activities →</button></a>
+        <hr class="divider"/>
+        <button class="btn-outline danger" onclick="doLogout()">Sign Out &amp; Switch User</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+const USER_KEY='cam_user';
+function getUser(){try{return JSON.parse(localStorage.getItem(USER_KEY)||'null');}catch{return null;}}
+function setUser(u){localStorage.setItem(USER_KEY,JSON.stringify(u));}
+function removeUser(){localStorage.removeItem(USER_KEY);}
+
+function doLogin(){
+  const name=document.getElementById('inp-name').value.trim();
+  const cls=document.getElementById('inp-class').value.trim().toUpperCase();
+  if(!name||!cls){document.getElementById('err').style.display='block';return;}
+  document.getElementById('err').style.display='none';
+  setUser({name,cls,loginAt:new Date().toISOString()});
+  // Redirect to activities or wherever they came from
+  const redir=new URLSearchParams(window.location.search).get('redirect')||'index.html';
+  window.location.href=redir;
+}
+function doLogout(){removeUser();showLoginForm();}
+function showLoginForm(){
+  document.getElementById('login-form').style.display='block';
+  document.getElementById('logged-in').style.display='none';
+}
+function showLoggedIn(u){
+  document.getElementById('login-form').style.display='none';
+  document.getElementById('logged-in').style.display='block';
+  document.getElementById('li-name').textContent=u.name;
+  document.getElementById('li-class').textContent='Class: '+u.cls;
+}
+// On load
+const existing=getUser();
+if(existing) showLoggedIn(existing);
+else showLoginForm();
+</script>
+</body>
+</html>
